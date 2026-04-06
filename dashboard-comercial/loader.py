@@ -60,12 +60,23 @@ def carregar_excel(path: str) -> tuple:
     df_visitas = df_visitas.reindex(columns=COLUNAS_VISITAS)
     df_visitas["Data"] = pd.to_datetime(df_visitas["Data"], errors="coerce")
     df_visitas = df_visitas.where(df_visitas.notna(), other=None)
+    for col in ("Duração (min)", "Interesse (1-5)"):
+        if col in df_visitas.columns:
+            df_visitas[col] = pd.to_numeric(df_visitas[col], errors="coerce")
 
     config = _carregar_config(xls)
     return df_empresas, df_visitas, config
 
 
 def _carregar_config(xls: pd.ExcelFile) -> dict:
+    """Carrega configurações da aba CONFIG do Excel.
+
+    Valores ausentes ou vazios mantêm o default de CONFIG_DEFAULTS.
+    Campos numéricos (CONFIG_INT_FIELDS) são convertidos para int.
+
+    Returns:
+        dict: Configuração com tipos corretos.
+    """
     df = pd.read_excel(xls, sheet_name="CONFIG", header=0, dtype=str)
     cfg = dict(CONFIG_DEFAULTS)  # começa com defaults
 
