@@ -1,0 +1,41 @@
+<h2>Como conectar o Excel ao Dashboard HTML?</h2>
+<p class="subtitle">Escolha a abordagem que melhor se encaixa no seu fluxo de trabalho</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Excel Manual → Script Python → HTML</h3>
+      <p>Você preenche o Excel com os dados das visitas (pode copiar do Agendor). Um script Python lê o Excel e atualiza o dashboard. Você clica em um arquivo <strong>.bat</strong> para atualizar.</p>
+      <div class="pros-cons" style="margin-top:12px">
+        <div class="pros"><h4>Vantagens</h4><ul><li>Simples e confiável</li><li>Total controle dos dados</li><li>Dashboard bonito e customizado</li></ul></div>
+        <div class="cons"><h4>Desvantagens</h4><ul><li>Precisa instalar Python</li><li>Atualização manual (1 clique)</li></ul></div>
+      </div>
+      <p style="margin-top:8px;font-size:0.85em;color:#666">⭐ <strong>Recomendado</strong> — equilíbrio ideal entre simplicidade e poder</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>API do Agendor → HTML em tempo real</h3>
+      <p>Um servidor local Python consulta o Agendor automaticamente e serve o dashboard atualizado. Os dados vêm direto do CRM, sem Excel.</p>
+      <div class="pros-cons" style="margin-top:12px">
+        <div class="pros"><h4>Vantagens</h4><ul><li>Dados sempre atualizados</li><li>Zero entrada manual</li></ul></div>
+        <div class="cons"><h4>Desvantagens</h4><ul><li>Precisa de API key do Agendor</li><li>Servidor precisa ficar rodando</li><li>Dependente da API</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Excel → HTML puro (sem instalação)</h3>
+      <p>Você exporta o Excel como <strong>.csv</strong> e o HTML lê o arquivo diretamente no navegador usando JavaScript. Sem Python, sem servidor.</p>
+      <div class="pros-cons" style="margin-top:12px">
+        <div class="pros"><h4>Vantagens</h4><ul><li>Nenhuma instalação</li><li>Funciona em qualquer PC</li></ul></div>
+        <div class="cons"><h4>Desvantagens</h4><ul><li>Navegador bloqueia leitura de arquivos locais</li><li>Precisa de servidor HTTP simples mesmo assim</li><li>Menos robusto</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>

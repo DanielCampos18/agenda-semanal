@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Comercial Externo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #001b47;
+    --navy2:   #1E3A8A;
+    --gold:    #af946c;
+    --gold-dk: #8a7050;
+    --white:   #ffffff;
+    --bg:      #F0F4F9;
+    --card:    #ffffff;
+    --text:    #0F172A;
+    --muted:   #64748B;
+    --border:  #CBD5E1;
+    --danger:  #DC2626;
+    --warn:    #D97706;
+    --ok:      #16A34A;
+    --pill-1:  #DBEAFE; --pill-1t: #1E40AF;
+    --pill-2:  #DCFCE7; --pill-2t: #166534;
+    --pill-3:  #FEF9C3; --pill-3t: #854D0E;
+    --pill-4:  #EDE9FE; --pill-4t: #5B21B6;
+    --shadow:  0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
+  }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* ── TOPBAR ─────────────────────────────────────────── */
+  .topbar {
+    background: var(--navy);
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .topbar-logo {
+    width: 32px; height: 32px; background: var(--gold);
+    border-radius: 6px; display: flex; align-items: center; justify-content: center;
+  }
+  .topbar-logo svg { width: 18px; height: 18px; fill: var(--navy); }
+  .topbar-title { color: #fff; font-weight: 700; font-size: 1em; letter-spacing: 0.01em; }
+  .topbar-title span { color: var(--gold); }
+  .topbar-right { display: flex; align-items: center; gap: 16px; }
+  .topbar-badge {
+    background: rgba(175,148,108,0.2); border: 1px solid var(--gold);
+    color: var(--gold); font-size: 0.72em; font-weight: 600;
+    padding: 3px 10px; border-radius: 20px; letter-spacing: 0.03em;
+  }
+  .topbar-date { color: rgba(255,255,255,0.55); font-size: 0.75em; }
+
+  /* ── CONTENT ─────────────────────────────────────────── */
+  .content { padding: 20px 24px; max-width: 1400px; margin: 0 auto; }
+
+  /* ── SECTION LABEL ─────────────────────────────────── */
+  .section-label {
+    font-size: 0.68em; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px;
+  }
+
+  /* ── KPI ROW ─────────────────────────────────────────── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .kpi-card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+    border-top: 3px solid var(--navy);
+    cursor: default;
+    transition: box-shadow 200ms ease, transform 200ms ease;
+  }
+  .kpi-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+  .kpi-card.danger { border-top-color: var(--danger); }
+  .kpi-card.warn   { border-top-color: var(--warn); }
+  .kpi-card.ok     { border-top-color: var(--ok); }
+  .kpi-card.gold   { border-top-color: var(--gold); }
+
+  .kpi-num {
+    font-size: 2em; font-weight: 800; line-height: 1;
+    color: var(--navy); margin-bottom: 4px;
+  }
+  .kpi-card.danger .kpi-num { color: var(--danger); }
+  .kpi-card.warn   .kpi-num { color: var(--warn); }
+  .kpi-card.ok     .kpi-num { color: var(--ok); }
+  .kpi-card.gold   .kpi-num { color: var(--gold-dk); }
+
+  .kpi-label { font-size: 0.72em; font-weight: 500; color: var(--muted); }
+  .kpi-sub   { font-size: 0.65em; color: var(--muted); margin-top: 6px; opacity: 0.8; }
+
+  /* ── GRID ROW 2 ─────────────────────────────────────── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; margin-bottom: 14px; }
+
+  /* ── CARD ───────────────────────────────────────────── */
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+  }
+  .card-title {
+    font-size: 0.72em; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.07em; color: var(--muted); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .card-title svg { width: 14px; height: 14px; opacity: 0.7; }
+
+  /* ── FUNIL ──────────────────────────────────────────── */
+  .funnel { display: flex; flex-direction: column; gap: 8px; }
+  .funnel-row { display: flex; align-items: center; gap: 10px; }
+  .funnel-name { font-size: 0.75em; font-weight: 500; color: var(--text); width: 160px; flex-shrink: 0; }
+  .funnel-track { flex: 1; background: #E2E8F0; border-radius: 4px; height: 26px; overflow: hidden; }
+  .funnel-fill {
+    height: 100%; border-radius: 4px;
+    display: flex; align-items: center; padding-left: 10px;
+    color: #fff; font-size: 0.72em; font-weight: 600;
+    transition: width 600ms cubic-bezier(0.4,0,0.2,1);
+  }
+  .funnel-n { font-size: 0.75em; font-weight: 700; width: 28px; text-align: right; color: var(--text); flex-shrink: 0; }
+  .funnel-pct { font-size: 0.65em; color: var(--muted); width: 38px; flex-shrink: 0; }
+
+  .conv-rate {
+    margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
+    font-size: 0.72em; color: var(--muted);
+  }
+  .conv-rate strong { color: var(--navy); font-size: 1.1em; }
+
+  /* ── MENSAIS ────────────────────────────────────────── */
+  .month-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 4px;
+  }
+  .month-col { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .month-name { font-size: 0.62em; color: var(--muted); font-weight: 600; text-transform: uppercase; }
+  .month-bar-wrap { width: 100%; height: 60px; display: flex; align-items: flex-end; }
+  .month-bar {
+    width: 100%; border-radius: 3px 3px 0 0;
+    background: var(--navy); opacity: 0.8;
+    min-height: 2px;
+    transition: opacity 150ms;
+    cursor: pointer;
+  }
+  .month-bar:hover { opacity: 1; }
+  .month-bar.current { background: var(--gold); opacity: 1; }
+  .month-n { font-size: 0.65em; font-weight: 700; color: var(--text); }
+
+  /* ── ALERTAS ────────────────────────────────────────── */
+  .alert-list { display: flex; flex-direction: column; gap: 6px; }
+  .alert-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 9px 12px; border-radius: 7px;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+    transition: background 150ms ease;
+  }
+  .alert-item:hover { filter: brightness(0.97); }
+  .alert-item.red { background: #FFF5F5; border-left-color: var(--danger); }
+  .alert-item.yellow { background: #FFFBEB; border-left-color: var(--warn); }
+  .alert-info { display: flex; flex-direction: column; gap: 2px; }
+  .alert-empresa { font-size: 0.78em; font-weight: 600; color: var(--text); }
+  .alert-sub { font-size: 0.68em; color: var(--muted); }
+  .alert-dias {
+    font-size: 0.72em; font-weight: 700; padding: 3px 9px;
+    border-radius: 20px; white-space: nowrap; flex-shrink: 0;
+  }
+  .alert-dias.red { background: #FEE2E2; color: #B91C1C; }
+  .alert-dias.yellow { background: #FEF3C7; color: #92400E; }
+
+  /* ── TABELA ─────────────────────────────────────────── */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.78em; }
+  thead tr { background: var(--navy); }
+  th {
+    color: rgba(255,255,255,0.9); padding: 9px 12px;
+    text-align: left; font-weight: 600; font-size: 0.78em;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  th:first-child { border-radius: 6px 0 0 0; }
+  th:last-child  { border-radius: 0 6px 0 0; }
+  td { padding: 8px 12px; border-bottom: 1px solid #EEF2F7; vertical-align: middle; }
+  tbody tr { transition: background 120ms ease; cursor: pointer; }
+  tbody tr:hover td { background: #F8FAFF; }
+  tbody tr:last-child td { border-bottom: none; }
+
+  .pill {
+    display: inline-block; padding: 2px 9px;
+    border-radius: 20px; font-size: 0.75em; font-weight: 600;
+    white-space: nowrap;
+  }
+  .pill-1 { background: var(--pill-1); color: var(--pill-1t); }
+  .pill-2 { background: var(--pill-2); color: var(--pill-2t); }
+  .pill-3 { background: var(--pill-3); color: var(--pill-3t); }
+  .pill-4 { background: var(--pill-4); color: var(--pill-4t); }
+
+  .temp-hot  { font-weight: 600; color: #B45309; font-size: 0.8em; }
+  .temp-norm { font-weight: 500; color: var(--muted); font-size: 0.8em; }
+
+  .dias-ok   { color: var(--ok); font-weight: 700; }
+  .dias-warn { color: var(--warn); font-weight: 700; }
+  .dias-red  { color: var(--danger); font-weight: 700; }
+
+  /* ── FILTER BAR ─────────────────────────────────────── */
+  .filter-bar {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 12px; flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 5px 13px; border-radius: 20px; border: 1px solid var(--border);
+    background: var(--card); color: var(--muted); font-size: 0.72em;
+    font-weight: 600; cursor: pointer; font-family: 'Montserrat', sans-serif;
+    transition: all 150ms ease;
+  }
+  .filter-btn:hover { border-color: var(--navy); color: var(--navy); }
+  .filter-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+  /* ── PERIODO SELECTOR ───────────────────────────────── */
+  .period-tabs { display: flex; gap: 4px; margin-left: auto; }
+  .period-tab {
+    padding: 4px 11px; border-radius: 6px; font-size: 0.7em;
+    font-weight: 600; cursor: pointer; color: var(--muted);
+    transition: all 150ms; font-family: 'Montserrat', sans-serif;
+    border: none; background: transparent;
+  }
+  .period-tab.active { background: var(--navy); color: #fff; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar" role="banner">
+  <div class="topbar-left">
+    <div class="topbar-logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M3 3h18v4H3V3zm0 6h12v4H3V9zm0 6h18v4H3v-4z"/></svg>
+    </div>
+    <span class="topbar-title">Dashboard <span>Comercial Externo</span></span>
+  </div>
+  <div class="topbar-right">
+    <span class="topbar-badge">AGENTE: JOÃO SILVA</span>
+    <span class="topbar-date">Atualizado: 06/04/2026 · 14:32</span>
+  </div>
+</header>
+
+<main class="content" role="main">
+
+  <!-- KPIs -->
+  <div class="section-label">Visão Geral · Acumulado 2026</div>
+  <div class="kpi-grid" role="list">
+
+    <div class="kpi-card" role="listitem" tabindex="0">
+      <div class="kpi-num">24</div>
+      <div class="kpi-label">1ªs Visitas realizadas</div>
+      <div class="kpi-sub">+6 em março</div>
+    </div>
+
+    <div class="kpi-card" role="listitem" tabindex="0">
+      <div class="kpi-num">14</div>
+      <div class="kpi-label">2ªs Visitas realizadas</div>
+      <div class="kpi-sub">58% de conversão</div>
+    </div>
+
+    <div class="kpi-card ok" role="listitem" tabindex="0">
+      <div class="kpi-num">6</div>
+      <div class="kpi-label">Procurações assinadas</div>
+      <div class="kpi-sub">43% da etapa anterior</div>
+    </div>
+
+    <div class="kpi-card gold" role="listitem" tabindex="0">
+      <div class="kpi-num">3</div>
+      <div class="kpi-label">Reuniões de Fechamento</div>
+      <div class="kpi-sub">50% da etapa anterior</div>
+    </div>
+
+    <div class="kpi-card danger" role="listitem" tabindex="0">
+      <div class="kpi-num">5</div>
+      <div class="kpi-label">Alertas de retorno</div>
+      <div class="kpi-sub">2 críticos · 3 em atenção</div>
+    </div>
+
+  </div>
+
+  <!-- FUNIL + MENSAL -->
+  <div class="grid-2">
+
+    <!-- Funil -->
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+        Funil de Conversão
+      </div>
+      <div class="funnel">
+        <div class="funnel-row">
+          <div class="funnel-name">1ª Visita</div>
+          <div class="funnel-track"><div class="funnel-fill" style="width:100%;background:#001b47">24 empresas</div></div>
+          <div class="funnel-n">24</div>
+          <div class="funnel-pct">100%</div>
+        </div>
+        <div class="funnel-row">
+          <div class="funnel-name">2ª Visita</div>
+          <div class="funnel-track"><div class="funnel-fill" style="width:58%;background:#1E3A8A">14 empresas</div></div>
+          <div class="funnel-n">14</div>
+          <div class="funnel-pct" style="color:var(--warn)">58%</div>
+        </div>
+        <div class="funnel-row">
+          <div class="funnel-name">Procuração Eletrônica</div>
+          <div class="funnel-track"><div class="funnel-fill" style="width:25%;background:#16A34A">6 empresas</div></div>
+          <div class="funnel-n">6</div>
+          <div class="funnel-pct" style="color:var(--ok)">25%</div>
+        </div>
+        <div class="funnel-row">
+          <div class="funnel-name">Reunião de Fechamento</div>
+          <div class="funnel-track"><div class="funnel-fill" style="width:12%;background:#af946c">3 empresas</div></div>
+          <div class="funnel-n">3</div>
+          <div class="funnel-pct" style="color:var(--gold-dk)">12,5%</div>
+        </div>
+      </div>
+      <div class="conv-rate">
+        Taxa 1ª Visita → Fechamento: <strong>12,5%</strong> &nbsp;·&nbsp;
+        Maior queda: <strong style="color:var(--warn)">2ª Visita → Procuração (42%)</strong>
+      </div>
+    </div>
+
+    <!-- Mensal -->
+    <div class="card">
+      <div class="card-title" style="justify-content:space-between">
+        <span style="display:flex;align-items:center;gap:6px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          1ªs Visitas por Mês
+        </span>
+        <div class="period-tabs">
+          <button class="period-tab active" type="button">2026</button>
+          <button class="period-tab" type="button">2025</button>
+        </div>
+      </div>
+      <div class="month-grid">
+        <!-- Jan–Fev: 0, Mar: 6, Abr–Dez: 0 (projetado) -->
+        <div class="month-col"><div class="month-name">Jan</div><div class="month-bar-wrap"><div class="month-bar" style="height:2px"></div></div><div class="month-n">0</div></div>
+        <div class="month-col"><div class="month-name">Fev</div><div class="month-bar-wrap"><div class="month-bar" style="height:2px"></div></div><div class="month-n">0</div></div>
+        <div class="month-col"><div class="month-name">Mar</div><div class="month-bar-wrap"><div class="month-bar current" style="height:60px"></div></div><div class="month-n" style="color:var(--gold-dk)">6</div></div>
+        <div class="month-col"><div class="month-name">Abr</div><div class="month-bar-wrap"><div class="month-bar" style="height:2px;opacity:0.3"></div></div><div class="month-n" style="color:var(--border)">—</div></div>
+        <div class="month-col"><div class="month-name">Mai</div><div class="month-bar-wrap"><div class="month-bar" style="height:2px;opacity:0.3"></div></div><div class="month-n" style="color:var(--border)">—</div></div>
+        <div class="month-col"><div class="month-name">Jun</div><div class="month-bar-wrap"><div class="month-bar" style="height:2px;opacity:0.3"></div></div><div class="month-n" style="color:var(--border)">—</div></div>
+        <div class="month-col"><div class="month-name">Jul</div><div class="month-bar-wrap"><div class="month-bar" style="height:2px;opacity:0.3"></div></div><div class="month-n" style="color:var(--border)">—</div></div>
+        <div class="month-col"><div class="month-name">Ago</div><div class="month-bar-wrap"><div class="month-bar" style="height:2px;opacity:0.3"></div></div><div class="month-n" style="color:var(--border)">—</div></div>
+        <div class="month-col"><div class="month-name">Set</div><div class="month-bar-wrap"><div class="month-bar" style="height:2px;opacity:0.3"></div></div><div class="month-n" style="color:var(--border)">—</div></div>
+        <div class="month-col"><div class="month-name">Out</div><div class="month-bar-wrap"><div class="month-bar" style="height:2px;opacity:0.3"></div></div><div class="month-n" style="color:var(--border)">—</div></div>
+        <div class="month-col"><div class="month-name">Nov</div><div class="month-bar-wrap"><div class="month-bar" style="height:2px;opacity:0.3"></div></div><div class="month-n" style="color:var(--border)">—</div></div>
+        <div class="month-col"><div class="month-name">Dez</div><div class="month-bar-wrap"><div class="month-bar" style="height:2px;opacity:0.3"></div></div><div class="month-n" style="color:var(--border)">—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALERTAS + TABELA -->
+  <div class="grid-3">
+
+    <!-- Alertas -->
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:var(--danger)"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Follow-up em Atraso
+      </div>
+      <div class="alert-list" role="list">
+        <div class="alert-item red" role="listitem" tabindex="0">
+          <div class="alert-info">
+            <span class="alert-empresa">Metalúrgica Souza Ltda</span>
+            <span class="alert-sub">1ª Visita · Quente · prazo: 30 dias</span>
+          </div>
+          <span class="alert-dias red">95 dias</span>
+        </div>
+        <div class="alert-item red" role="listitem" tabindex="0">
+          <div class="alert-info">
+            <span class="alert-empresa">Comércio JB Ltda</span>
+            <span class="alert-sub">1ª Visita · Quente · prazo: 30 dias</span>
+          </div>
+          <span class="alert-dias red">72 dias</span>
+        </div>
+        <div class="alert-item yellow" role="listitem" tabindex="0">
+          <div class="alert-info">
+            <span class="alert-empresa">Distribuidora Norte S/A</span>
+            <span class="alert-sub">1ª Visita · Normal · prazo: 90 dias</span>
+          </div>
+          <span class="alert-dias yellow">80 dias</span>
+        </div>
+        <div class="alert-item yellow" role="listitem" tabindex="0">
+          <div class="alert-info">
+            <span class="alert-empresa">Grupo Horizonte</span>
+            <span class="alert-sub">1ª Visita · Normal · prazo: 90 dias</span>
+          </div>
+          <span class="alert-dias yellow">65 dias</span>
+        </div>
+        <div class="alert-item yellow" role="listitem" tabindex="0">
+          <div class="alert-info">
+            <span class="alert-empresa">RK Serviços ME</span>
+            <span class="alert-sub">2ª Visita · Quente · proc. pendente</span>
+          </div>
+          <span class="alert-dias yellow">40 dias</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mini Resumo -->
+    <div class="card">
+      <div class="card-title">Resumo Mensal</div>
+      <table style="font-size:0.78em">
+        <thead>
+          <tr>
+            <th style="background:var(--navy);border-radius:6px 0 0 0;padding:7px 10px">Mês</th>
+            <th style="background:var(--navy);padding:7px 10px">1ª V.</th>
+            <th style="background:var(--navy);padding:7px 10px">2ª V.</th>
+            <th style="background:var(--navy);border-radius:0 6px 0 0;padding:7px 10px">Fech.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Jan</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>Fev</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr style="background:#F0F7FF"><td><strong>Mar</strong></td><td><strong>6</strong></td><td><strong>0</strong></td><td><strong>0</strong></td></tr>
+          <tr style="color:var(--border)"><td>Abr</td><td>—</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TABELA EMPRESAS -->
+  <div class="card">
+    <div class="card-title" style="justify-content:space-between">
+      <span style="display:flex;align-items:center;gap:6px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+        Todas as Empresas
+      </span>
+      <div class="filter-bar" style="margin-bottom:0">
+        <button class="filter-btn active" type="button">Todas</button>
+        <button class="filter-btn" type="button">Quentes</button>
+        <button class="filter-btn" type="button">Atrasadas</button>
+        <button class="filter-btn" type="button">Em Fechamento</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table role="grid" aria-label="Empresas acompanhadas">
+        <thead>
+          <tr>
+            <th scope="col">Empresa</th>
+            <th scope="col">Segmento</th>
+            <th scope="col">Temperatura</th>
+            <th scope="col">Etapa Atual</th>
+            <th scope="col">Última Ação</th>
+            <th scope="col">Dias s/ retorno</th>
+            <th scope="col">SLA</th>
+            <th scope="col">Observação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Metalúrgica Souza</strong></td>
+            <td>Indústria</td>
+            <td><span class="temp-hot">&#9673; Quente</span></td>
+            <td><span class="pill pill-1">1ª Visita</span></td>
+            <td>02/01/2026</td>
+            <td><span class="dias-red">95 dias</span></td>
+            <td>30 dias</td>
+            <td style="color:var(--muted);font-size:0.85em">Interesse alto em REFIS</td>
+          </tr>
+          <tr>
+            <td><strong>Distribuidora Norte</strong></td>
+            <td>Comércio</td>
+            <td><span class="temp-norm">&#9675; Normal</span></td>
+            <td><span class="pill pill-2">2ª Visita</span></td>
+            <td>15/01/2026</td>
+            <td><span class="dias-warn">81 dias</span></td>
+            <td>90 dias</td>
+            <td style="color:var(--muted);font-size:0.85em">Aguarda diretoria</td>
+          </tr>
+          <tr>
+            <td><strong>Grupo Horizonte</strong></td>
+            <td>Serviços</td>
+            <td><span class="temp-norm">&#9675; Normal</span></td>
+            <td><span class="pill pill-1">1ª Visita</span></td>
+            <td>01/02/2026</td>
+            <td><span class="dias-warn">64 dias</span></td>
+            <td>90 dias</td>
+            <td style="color:var(--muted);font-size:0.85em">—</td>
+          </tr>
+          <tr>
+            <td><strong>RK Serviços ME</strong></td>
+            <td>Serviços</td>
+            <td><span class="temp-hot">&#9673; Quente</span></td>
+            <td><span class="pill pill-3">Procuração</span></td>
+            <td>28/02/2026</td>
+            <td><span class="dias-warn">37 dias</span></td>
+            <td>30 dias</td>
+            <td style="color:var(--muted);font-size:0.85em">Procuração pendente assinatura</td>
+          </tr>
+          <tr>
+            <td><strong>Alpha Contabilidade</strong></td>
+            <td>Contabilidade</td>
+            <td><span class="temp-hot">&#9673; Quente</span></td>
+            <td><span class="pill pill-4">Fechamento</span></td>
+            <td>20/03/2026</td>
+            <td><span class="dias-ok">17 dias</span></td>
+            <td>30 dias</td>
+            <td style="color:var(--muted);font-size:0.85em">Reunião agendada 15/04</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

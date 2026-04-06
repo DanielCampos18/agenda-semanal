@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Montserrat', sans-serif; background: #F0F4F9; color: #0F172A; font-size: 13px; padding: 24px; }
+  h2 { font-size: 1.1em; font-weight: 700; color: #001b47; margin-bottom: 4px; }
+  .subtitle { font-size: 0.8em; color: #64748B; margin-bottom: 24px; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 4px; margin-bottom: 0; }
+  .tab {
+    padding: 8px 18px; border-radius: 8px 8px 0 0;
+    font-size: 0.78em; font-weight: 600; cursor: pointer;
+    background: #CBD5E1; color: #475569; border: none;
+    font-family: 'Montserrat', sans-serif;
+    transition: all 150ms;
+  }
+  .tab.active { background: #001b47; color: #fff; }
+  .tab:hover:not(.active) { background: #94A3B8; color: #fff; }
+
+  /* EXCEL MOCK */
+  .excel-wrap {
+    background: #fff; border-radius: 0 10px 10px 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  .excel-toolbar {
+    background: #1D6A38; padding: 6px 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .excel-toolbar span { color: rgba(255,255,255,0.9); font-size: 0.72em; font-weight: 600; }
+  .toolbar-btn {
+    background: rgba(255,255,255,0.15); color: #fff;
+    border: none; border-radius: 4px; padding: 3px 9px;
+    font-size: 0.68em; font-weight: 600; cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  /* TABLE */
+  .excel-table-wrap { overflow-x: auto; max-height: 340px; overflow-y: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.75em; }
+  .col-header {
+    background: #E2E8F0; font-weight: 700; font-size: 0.68em;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    padding: 6px 10px; border: 1px solid #CBD5E1;
+    color: #475569; white-space: nowrap; position: sticky; top: 0; z-index: 2;
+  }
+  .row-num {
+    background: #F1F5F9; color: #94A3B8; font-size: 0.7em;
+    padding: 5px 8px; border: 1px solid #E2E8F0;
+    text-align: center; width: 28px;
+  }
+  td {
+    padding: 5px 9px; border: 1px solid #E8EDF2;
+    white-space: nowrap; color: #334155;
+  }
+  tr:nth-child(even) td { background: #FAFCFF; }
+  tr:hover td { background: #EEF6FF; }
+
+  /* REQUIRED / OPTIONAL badges */
+  .req { display: inline-block; background: #FEE2E2; color: #991B1B; font-size: 0.65em; font-weight: 700; padding: 1px 6px; border-radius: 4px; margin-left: 4px; }
+  .opt { display: inline-block; background: #DCFCE7; color: #166534; font-size: 0.65em; font-weight: 700; padding: 1px 6px; border-radius: 4px; margin-left: 4px; }
+  .auto { display: inline-block; background: #DBEAFE; color: #1E40AF; font-size: 0.65em; font-weight: 700; padding: 1px 6px; border-radius: 4px; margin-left: 4px; }
+
+  /* CHECKBOX MOCK */
+  .check-yes { color: #16A34A; font-weight: 700; }
+  .check-no  { color: #CBD5E1; }
+
+  /* PILL */
+  .pill { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 0.75em; font-weight: 600; }
+  .p-quente { background: #FEF3C7; color: #92400E; }
+  .p-normal { background: #E2E8F0; color: #475569; }
+  .p-1v { background: #DBEAFE; color: #1E40AF; }
+  .p-2v { background: #DCFCE7; color: #166534; }
+  .p-proc { background: #FEF9C3; color: #854D0E; }
+  .p-fech { background: #EDE9FE; color: #5B21B6; }
+
+  /* LEGEND */
+  .legend { display: flex; gap: 14px; padding: 10px 14px; background: #F8FAFC; border-top: 1px solid #E2E8F0; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.7em; color: #64748B; }
+
+  /* SCHEMA SECTION */
+  .schema { padding: 16px; }
+  .schema h3 { font-size: 0.85em; font-weight: 700; color: #001b47; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .col-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .col-item {
+    background: #F8FAFC; border: 1px solid #E2E8F0;
+    border-radius: 7px; padding: 9px 12px;
+    display: flex; flex-direction: column; gap: 3px;
+  }
+  .col-name { font-weight: 700; font-size: 0.8em; color: #0F172A; }
+  .col-type { font-size: 0.68em; color: #64748B; }
+  .col-example { font-size: 0.68em; color: #94A3B8; font-style: italic; }
+
+  /* SECTION PANELS */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* FLOW DIAGRAM */
+  .flow { display: flex; align-items: center; gap: 0; flex-wrap: wrap; padding: 16px; background: #F8FAFC; border-radius: 0 0 10px 10px; }
+  .flow-step {
+    background: #fff; border: 2px solid #001b47; border-radius: 8px;
+    padding: 10px 14px; text-align: center; min-width: 110px;
+  }
+  .flow-step .fs-title { font-size: 0.78em; font-weight: 700; color: #001b47; }
+  .flow-step .fs-sub   { font-size: 0.65em; color: #64748B; margin-top: 2px; }
+  .flow-arrow { color: #001b47; font-size: 1.4em; padding: 0 8px; font-weight: 700; }
+  .flow-step.gold-step { border-color: #af946c; }
+  .flow-step.gold-step .fs-title { color: #8a7050; }
+</style>
+</head>
+<body>
+
+<h2>Estrutura do Excel — Fonte de Dados</h2>
+<p class="subtitle">3 abas · Preencha as células brancas · Colunas azuis são calculadas automaticamente pelo script</p>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="showTab('empresas')" type="button">📋 Aba 1: EMPRESAS</button>
+  <button class="tab" onclick="showTab('visitas')" type="button">📅 Aba 2: VISITAS</button>
+  <button class="tab" onclick="showTab('config')" type="button">⚙️ Aba 3: CONFIG</button>
+  <button class="tab" onclick="showTab('fluxo')" type="button">🔄 Fluxo de Atualização</button>
+</div>
+
+<!-- ABA EMPRESAS -->
+<div id="panel-empresas" class="panel active excel-wrap">
+  <div class="excel-toolbar">
+    <span>dados_comercial.xlsx</span>
+    <span style="margin-left:8px;opacity:0.6">|</span>
+    <span>Aba: EMPRESAS</span>
+    <button class="toolbar-btn">+ Nova Empresa</button>
+  </div>
+  <div class="excel-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-header" style="width:28px">#</th>
+          <th class="col-header">ID <span class="auto">AUTO</span></th>
+          <th class="col-header">Nome da Empresa <span class="req">OBRIG</span></th>
+          <th class="col-header">CNPJ <span class="opt">OPC</span></th>
+          <th class="col-header">Segmento <span class="req">OBRIG</span></th>
+          <th class="col-header">Cidade <span class="opt">OPC</span></th>
+          <th class="col-header">Estado <span class="opt">OPC</span></th>
+          <th class="col-header">Nome Contato <span class="opt">OPC</span></th>
+          <th class="col-header">Cargo <span class="opt">OPC</span></th>
+          <th class="col-header">Telefone <span class="opt">OPC</span></th>
+          <th class="col-header">E-mail <span class="opt">OPC</span></th>
+          <th class="col-header">Temperatura <span class="req">OBRIG</span></th>
+          <th class="col-header">Porte <span class="opt">OPC</span></th>
+          <th class="col-header">Origem Lead <span class="opt">OPC</span></th>
+          <th class="col-header">Observações Gerais <span class="opt">OPC</span></th>
+          <th class="col-header">Ativo? <span class="req">OBRIG</span></th>
+          <th class="col-header">Etapa Atual <span class="auto">AUTO</span></th>
+          <th class="col-header">Dias Sem Retorno <span class="auto">AUTO</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-num">1</td>
+          <td style="color:#1E40AF;font-weight:600">EMP001</td>
+          <td><strong>Metalúrgica Souza Ltda</strong></td>
+          <td>12.345.678/0001-99</td>
+          <td>Indústria</td>
+          <td>São Paulo</td>
+          <td>SP</td>
+          <td>Carlos Souza</td>
+          <td>Diretor</td>
+          <td>(11) 99999-0001</td>
+          <td>carlos@souza.com</td>
+          <td><span class="pill p-quente">Quente</span></td>
+          <td>Médio</td>
+          <td>Indicação</td>
+          <td>Interesse em REFIS estadual</td>
+          <td><span class="check-yes">✓ Sim</span></td>
+          <td style="color:#1E40AF">1ª Visita</td>
+          <td style="color:#DC2626;font-weight:700">95 dias</td>
+        </tr>
+        <tr>
+          <td class="row-num">2</td>
+          <td style="color:#1E40AF;font-weight:600">EMP002</td>
+          <td><strong>Distribuidora Norte S/A</strong></td>
+          <td>98.765.432/0001-11</td>
+          <td>Comércio</td>
+          <td>Campinas</td>
+          <td>SP</td>
+          <td>Ana Lima</td>
+          <td>Gerente Financeiro</td>
+          <td>(19) 98888-0002</td>
+          <td>ana@dnorte.com.br</td>
+          <td><span class="pill p-normal">Normal</span></td>
+          <td>Grande</td>
+          <td>Prospecção ativa</td>
+          <td>Aguarda aprovação diretoria</td>
+          <td><span class="check-yes">✓ Sim</span></td>
+          <td style="color:#1E40AF">2ª Visita</td>
+          <td style="color:#D97706;font-weight:700">81 dias</td>
+        </tr>
+        <tr>
+          <td class="row-num">3</td>
+          <td style="color:#1E40AF;font-weight:600">EMP003</td>
+          <td><strong>Alpha Contabilidade</strong></td>
+          <td>55.123.456/0001-77</td>
+          <td>Contabilidade</td>
+          <td>São Paulo</td>
+          <td>SP</td>
+          <td>Roberto Alves</td>
+          <td>Sócio</td>
+          <td>(11) 97777-0003</td>
+          <td>roberto@alpha.cnt</td>
+          <td><span class="pill p-quente">Quente</span></td>
+          <td>Pequeno</td>
+          <td>LinkedIn</td>
+          <td>Reunião de fechamento marcada</td>
+          <td><span class="check-yes">✓ Sim</span></td>
+          <td style="color:#5B21B6">Fechamento</td>
+          <td style="color:#16A34A;font-weight:700">17 dias</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><span class="req">OBRIG</span> Campo obrigatório para o dashboard</div>
+    <div class="legend-item"><span class="opt">OPC</span> Opcional — enriquece o relatório</div>
+    <div class="legend-item"><span class="auto">AUTO</span> Calculado pelo script Python — não editar</div>
+    <div class="legend-item">Temperatura: <strong>Quente</strong> (SLA 30 dias) ou <strong>Normal</strong> (SLA 90 dias)</div>
+  </div>
+</div>
+
+<!-- ABA VISITAS -->
+<div id="panel-visitas" class="panel excel-wrap">
+  <div class="excel-toolbar">
+    <span>dados_comercial.xlsx</span>
+    <span style="margin-left:8px;opacity:0.6">|</span>
+    <span>Aba: VISITAS</span>
+    <button class="toolbar-btn">+ Registrar Visita</button>
+  </div>
+  <div class="excel-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-header" style="width:28px">#</th>
+          <th class="col-header">Data <span class="req">OBRIG</span></th>
+          <th class="col-header">ID Empresa <span class="req">OBRIG</span></th>
+          <th class="col-header">Etapa <span class="req">OBRIG</span></th>
+          <th class="col-header">Visita Realizada? <span class="req">OBRIG</span></th>
+          <th class="col-header">Procuração Assinada? <span class="opt">OPC</span></th>
+          <th class="col-header">Proposta Enviada? <span class="opt">OPC</span></th>
+          <th class="col-header">Contrato Fechado? <span class="opt">OPC</span></th>
+          <th class="col-header">Duração (min) <span class="opt">OPC</span></th>
+          <th class="col-header">Resultado <span class="req">OBRIG</span></th>
+          <th class="col-header">Interesse (1–5) <span class="opt">OPC</span></th>
+          <th class="col-header">Próxima Ação <span class="opt">OPC</span></th>
+          <th class="col-header">Data Próx. Ação <span class="opt">OPC</span></th>
+          <th class="col-header">Obstáculo <span class="opt">OPC</span></th>
+          <th class="col-header">Relatório Resumido <span class="opt">OPC</span></th>
+          <th class="col-header">Registrado por <span class="opt">OPC</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-num">1</td>
+          <td>02/01/2026</td>
+          <td style="color:#1E40AF;font-weight:600">EMP001</td>
+          <td><span class="pill p-1v">1ª Visita</span></td>
+          <td><span class="check-yes">✓ SIM</span></td>
+          <td><span class="check-no">☐ NÃO</span></td>
+          <td><span class="check-no">☐ NÃO</span></td>
+          <td><span class="check-no">☐ NÃO</span></td>
+          <td>45</td>
+          <td>Positivo — interesse confirmado</td>
+          <td style="font-weight:700;color:#16A34A">5</td>
+          <td>Agendar 2ª visita</td>
+          <td>15/02/2026</td>
+          <td>—</td>
+          <td>Diretor muito receptivo ao REFIS</td>
+          <td>João Silva</td>
+        </tr>
+        <tr>
+          <td class="row-num">2</td>
+          <td>15/01/2026</td>
+          <td style="color:#1E40AF;font-weight:600">EMP002</td>
+          <td><span class="pill p-1v">1ª Visita</span></td>
+          <td><span class="check-yes">✓ SIM</span></td>
+          <td><span class="check-no">☐ NÃO</span></td>
+          <td><span class="check-no">☐ NÃO</span></td>
+          <td><span class="check-no">☐ NÃO</span></td>
+          <td>30</td>
+          <td>Neutro — precisa consultar diretoria</td>
+          <td style="font-weight:700;color:#D97706">3</td>
+          <td>Aguardar retorno</td>
+          <td>01/02/2026</td>
+          <td>Decisão em comitê</td>
+          <td>Gerente financeira receptiva</td>
+          <td>João Silva</td>
+        </tr>
+        <tr>
+          <td class="row-num">3</td>
+          <td>10/02/2026</td>
+          <td style="color:#1E40AF;font-weight:600">EMP002</td>
+          <td><span class="pill p-2v">2ª Visita</span></td>
+          <td><span class="check-yes">✓ SIM</span></td>
+          <td><span class="check-no">☐ NÃO</span></td>
+          <td><span class="check-yes">✓ SIM</span></td>
+          <td><span class="check-no">☐ NÃO</span></td>
+          <td>60</td>
+          <td>Positivo — proposta enviada</td>
+          <td style="font-weight:700;color:#16A34A">4</td>
+          <td>Aguardar assinatura procuração</td>
+          <td>25/02/2026</td>
+          <td>Aguarda jurídico interno</td>
+          <td>Apresentou simulação tributária</td>
+          <td>João Silva</td>
+        </tr>
+        <tr>
+          <td class="row-num">4</td>
+          <td>20/03/2026</td>
+          <td style="color:#1E40AF;font-weight:600">EMP003</td>
+          <td><span class="pill p-fech">Fechamento</span></td>
+          <td><span class="check-yes">✓ SIM</span></td>
+          <td><span class="check-yes">✓ SIM</span></td>
+          <td><span class="check-yes">✓ SIM</span></td>
+          <td><span class="check-no">☐ NÃO</span></td>
+          <td>90</td>
+          <td>Contrato em análise final</td>
+          <td style="font-weight:700;color:#16A34A">5</td>
+          <td>Reunião de assinatura</td>
+          <td>15/04/2026</td>
+          <td>—</td>
+          <td>Sócio aprovou valores, aguarda assinatura</td>
+          <td>João Silva</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><strong>Etapa:</strong> 1ª Visita · 2ª Visita · Procuração Eletrônica · Reunião de Fechamento</div>
+    <div class="legend-item"><strong>Resultado:</strong> Positivo / Neutro / Negativo / Sem Contato</div>
+    <div class="legend-item"><strong>Interesse:</strong> 1 (frio) a 5 (muito quente)</div>
+    <div class="legend-item">Cada visita = 1 linha · mesmo empresa pode ter múltiplas linhas</div>
+  </div>
+</div>
+
+<!-- ABA CONFIG -->
+<div id="panel-config" class="panel excel-wrap">
+  <div class="excel-toolbar">
+    <span>dados_comercial.xlsx</span>
+    <span style="margin-left:8px;opacity:0.6">|</span>
+    <span>Aba: CONFIG</span>
+  </div>
+  <div class="excel-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-header">Parâmetro</th>
+          <th class="col-header">Valor</th>
+          <th class="col-header">Descrição</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>nome_agente</strong></td><td>João Silva</td><td>Nome exibido no dashboard</td></tr>
+        <tr><td><strong>sla_quente_dias</strong></td><td style="color:#DC2626;font-weight:700">30</td><td>Prazo máximo de retorno para prospects quentes</td></tr>
+        <tr><td><strong>sla_normal_dias</strong></td><td style="color:#D97706;font-weight:700">90</td><td>Prazo máximo de retorno para prospects normais</td></tr>
+        <tr><td><strong>ano_filtro</strong></td><td>2026</td><td>Ano padrão exibido no dashboard</td></tr>
+        <tr><td><strong>empresa_nome</strong></td><td>Inteligência Tributária Ltda</td><td>Nome da sua empresa (rodapé do dashboard)</td></tr>
+        <tr><td><strong>cor_primaria</strong></td><td style="color:#001b47;font-weight:700">#001b47</td><td>Cor principal (navy)</td></tr>
+        <tr><td><strong>cor_acento</strong></td><td style="color:#8a7050;font-weight:700">#af946c</td><td>Cor de destaque (ouro)</td></tr>
+        <tr><td><strong>alerta_amarelo_pct</strong></td><td>75</td><td>% do SLA para exibir alerta amarelo (ex: 75% de 30 = 22 dias)</td></tr>
+        <tr><td><strong>mostrar_cnpj</strong></td><td>SIM</td><td>Exibir CNPJ na tabela do dashboard</td></tr>
+        <tr><td><strong>mostrar_telefone</strong></td><td>NÃO</td><td>Exibir telefone na tabela do dashboard</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="legend">
+    <div class="legend-item">Edite apenas a coluna <strong>Valor</strong> · Não renomeie os parâmetros</div>
+    <div class="legend-item">Após alterar, rode o <strong>atualizar.bat</strong> para refletir no dashboard</div>
+  </div>
+</div>
+
+<!-- ABA FLUXO -->
+<div id="panel-fluxo" class="panel excel-wrap">
+  <div style="padding:20px">
+    <h3 style="font-size:0.9em;font-weight:700;color:#001b47;margin-bottom:6px">Como funciona a atualização</h3>
+    <p style="font-size:0.75em;color:#64748B;margin-bottom:20px">Fluxo completo do preenchimento ao dashboard atualizado</p>
+  </div>
+  <div class="flow">
+    <div class="flow-step">
+      <div class="fs-title">1. Agente visita</div>
+      <div class="fs-sub">Relata por WhatsApp / Agendor</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="fs-title">2. Você preenche</div>
+      <div class="fs-sub">Aba VISITAS do Excel<br>1 linha por visita</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step gold-step">
+      <div class="fs-title">3. Duplo clique</div>
+      <div class="fs-sub"><strong>atualizar.bat</strong><br>≈ 2 segundos</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="fs-title">4. Script Python</div>
+      <div class="fs-sub">Lê Excel · calcula métricas<br>gera dashboard.html</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step gold-step">
+      <div class="fs-title">5. Dashboard abre</div>
+      <div class="fs-sub">Navegador abre automaticamente<br>com dados atualizados</div>
+    </div>
+  </div>
+  <div style="padding:16px;background:#F8FAFC;border-top:1px solid #E2E8F0">
+    <p style="font-size:0.75em;color:#64748B">
+      <strong style="color:#001b47">Arquivos gerados:</strong> &nbsp;
+      <code style="background:#E2E8F0;padding:2px 6px;border-radius:4px">dados_comercial.xlsx</code> &nbsp;·&nbsp;
+      <code style="background:#E2E8F0;padding:2px 6px;border-radius:4px">dashboard.html</code> &nbsp;·&nbsp;
+      <code style="background:#E2E8F0;padding:2px 6px;border-radius:4px">atualizar.bat</code> &nbsp;·&nbsp;
+      <code style="background:#E2E8F0;padding:2px 6px;border-radius:4px">gerar_dashboard.py</code>
+    </p>
+  </div>
+</div>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+</script>
+
+</body>
+</html>

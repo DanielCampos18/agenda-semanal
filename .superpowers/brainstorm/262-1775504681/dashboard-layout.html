@@ -1,0 +1,212 @@
+<style>
+  * { box-sizing: border-box; }
+  .dash-wrap { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; padding: 16px; border-radius: 10px; }
+  .dash-header { background: #001b47; color: #fff; padding: 14px 20px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .dash-header h1 { font-size: 1.1em; margin: 0; }
+  .dash-header span { font-size: 0.8em; opacity: 0.7; }
+  .kpi-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border-radius: 8px; padding: 12px 14px; border-left: 4px solid #001b47; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .kpi .num { font-size: 1.8em; font-weight: 700; color: #001b47; }
+  .kpi .label { font-size: 0.72em; color: #666; margin-top: 2px; }
+  .kpi.alert { border-left-color: #e53e3e; }
+  .kpi.alert .num { color: #e53e3e; }
+  .kpi.ok { border-left-color: #38a169; }
+  .kpi.ok .num { color: #38a169; }
+  .kpi.warn { border-left-color: #d69e2e; }
+  .kpi.warn .num { color: #d69e2e; }
+
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .card { background: #fff; border-radius: 8px; padding: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .card h3 { font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin: 0 0 12px 0; }
+
+  /* Funil */
+  .funnel { display: flex; flex-direction: column; gap: 6px; }
+  .funnel-step { display: flex; align-items: center; gap: 10px; }
+  .funnel-bar-wrap { flex: 1; background: #eee; border-radius: 4px; height: 28px; overflow: hidden; }
+  .funnel-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding: 0 10px; color: #fff; font-size: 0.78em; font-weight: 600; }
+  .funnel-label { font-size: 0.78em; color: #444; width: 130px; }
+  .funnel-count { font-size: 0.78em; font-weight: 700; width: 30px; text-align: right; color: #333; }
+
+  /* Alertas */
+  .alert-list { display: flex; flex-direction: column; gap: 6px; }
+  .alert-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; border-radius: 6px; font-size: 0.78em; }
+  .alert-item.red { background: #fff5f5; border-left: 3px solid #e53e3e; }
+  .alert-item.yellow { background: #fffff0; border-left: 3px solid #d69e2e; }
+  .badge { font-size: 0.72em; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+  .badge.red { background: #fed7d7; color: #c53030; }
+  .badge.yellow { background: #fefcbf; color: #975a16; }
+
+  /* Tabela */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.78em; }
+  th { background: #001b47; color: #fff; padding: 7px 10px; text-align: left; font-weight: 500; }
+  td { padding: 6px 10px; border-bottom: 1px solid #eee; }
+  tr:hover td { background: #f7fafc; }
+  .status-pill { padding: 2px 8px; border-radius: 20px; font-size: 0.72em; font-weight: 600; }
+  .s1 { background: #bee3f8; color: #2b6cb0; }
+  .s2 { background: #c6f6d5; color: #276749; }
+  .s3 { background: #fefcbf; color: #975a16; }
+  .s4 { background: #e9d8fd; color: #553c9a; }
+  .dias-ok { color: #38a169; font-weight: 600; }
+  .dias-warn { color: #d69e2e; font-weight: 600; }
+  .dias-alert { color: #e53e3e; font-weight: 600; }
+
+  .row3 { margin-bottom: 4px; }
+</style>
+
+<h2>Layout do Dashboard — Comercial Externo</h2>
+<p class="subtitle">Visualização interativa de funil, alertas e acompanhamento por empresa</p>
+
+<div class="dash-wrap">
+
+  <!-- Header -->
+  <div class="dash-header">
+    <h1>📊 Dashboard Comercial Externo</h1>
+    <span>Atualizado em: 06/04/2026 · Agente: João Silva</span>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="num">24</div>
+      <div class="label">1ªs Visitas (total)</div>
+    </div>
+    <div class="kpi">
+      <div class="num">14</div>
+      <div class="label">2ªs Visitas realizadas</div>
+    </div>
+    <div class="kpi ok">
+      <div class="num">6</div>
+      <div class="label">Procurações assinadas</div>
+    </div>
+    <div class="kpi ok">
+      <div class="num">3</div>
+      <div class="label">Reuniões de Fechamento</div>
+    </div>
+    <div class="kpi alert">
+      <div class="num">5</div>
+      <div class="label">⚠ Atrasados para retorno</div>
+    </div>
+  </div>
+
+  <div class="row2">
+    <!-- Funil de Conversão -->
+    <div class="card">
+      <h3>Funil de Conversão</h3>
+      <div class="funnel">
+        <div class="funnel-step">
+          <div class="funnel-label">1ª Visita</div>
+          <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:100%;background:#001b47">24 prospects</div></div>
+          <div class="funnel-count">24</div>
+        </div>
+        <div class="funnel-step">
+          <div class="funnel-label">2ª Visita</div>
+          <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:58%;background:#2b6cb0">14 prospects</div></div>
+          <div class="funnel-count">14</div>
+        </div>
+        <div class="funnel-step">
+          <div class="funnel-label">Procuração Eletrônica</div>
+          <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:25%;background:#38a169">6 prospects</div></div>
+          <div class="funnel-count">6</div>
+        </div>
+        <div class="funnel-step">
+          <div class="funnel-label">Reunião Fechamento</div>
+          <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:12%;background:#af946c">3 prospects</div></div>
+          <div class="funnel-count">3</div>
+        </div>
+      </div>
+      <div style="margin-top:10px;font-size:0.75em;color:#666">Taxa de conversão 1ª→Fechamento: <strong>12,5%</strong></div>
+    </div>
+
+    <!-- Alertas de Follow-up -->
+    <div class="card">
+      <h3>⚠ Alertas de Follow-up</h3>
+      <div class="alert-list">
+        <div class="alert-item red">
+          <span><strong>Metalúrgica Souza Ltda</strong><br>1ª visita há 95 dias — Temperatura: Quente</span>
+          <span class="badge red">95 dias</span>
+        </div>
+        <div class="alert-item red">
+          <span><strong>Comércio JB Ltda</strong><br>1ª visita há 72 dias — Temperatura: Quente</span>
+          <span class="badge red">72 dias</span>
+        </div>
+        <div class="alert-item yellow">
+          <span><strong>Distribuidora Norte S/A</strong><br>1ª visita há 80 dias — Temperatura: Normal</span>
+          <span class="badge yellow">80 dias</span>
+        </div>
+        <div class="alert-item yellow">
+          <span><strong>Grupo Horizonte</strong><br>1ª visita há 65 dias — Temperatura: Normal</span>
+          <span class="badge yellow">65 dias</span>
+        </div>
+        <div class="alert-item yellow">
+          <span><strong>RK Serviços ME</strong><br>2ª visita há 40 dias — Procuração pendente</span>
+          <span class="badge yellow">40 dias</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabela de Empresas -->
+  <div class="card row3">
+    <h3>Todas as Empresas — Acompanhamento Individual</h3>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Empresa</th>
+          <th>Segmento</th>
+          <th>Temperatura</th>
+          <th>Etapa Atual</th>
+          <th>Última Ação</th>
+          <th>Dias s/ retorno</th>
+          <th>Prazo limite</th>
+        </tr>
+        <tr>
+          <td>Metalúrgica Souza</td>
+          <td>Indústria</td>
+          <td>🔥 Quente</td>
+          <td><span class="status-pill s1">1ª Visita</span></td>
+          <td>02/01/2026</td>
+          <td class="dias-alert">95 dias</td>
+          <td>30 dias</td>
+        </tr>
+        <tr>
+          <td>Distribuidora Norte</td>
+          <td>Comércio</td>
+          <td>🌡 Normal</td>
+          <td><span class="status-pill s2">2ª Visita</span></td>
+          <td>15/01/2026</td>
+          <td class="dias-warn">81 dias</td>
+          <td>90 dias</td>
+        </tr>
+        <tr>
+          <td>Grupo Horizonte</td>
+          <td>Serviços</td>
+          <td>🌡 Normal</td>
+          <td><span class="status-pill s1">1ª Visita</span></td>
+          <td>01/02/2026</td>
+          <td class="dias-warn">64 dias</td>
+          <td>90 dias</td>
+        </tr>
+        <tr>
+          <td>RK Serviços ME</td>
+          <td>Serviços</td>
+          <td>🔥 Quente</td>
+          <td><span class="status-pill s3">Procuração</span></td>
+          <td>28/02/2026</td>
+          <td class="dias-ok">37 dias</td>
+          <td>30 dias</td>
+        </tr>
+        <tr>
+          <td>Alpha Contabilidade</td>
+          <td>Contabilidade</td>
+          <td>🔥 Quente</td>
+          <td><span class="status-pill s4">Fechamento</span></td>
+          <td>20/03/2026</td>
+          <td class="dias-ok">17 dias</td>
+          <td>30 dias</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+</div>
