@@ -164,7 +164,7 @@ Archive of all completed and cancelled tasks.
 - This month: `X of Y tasks completed`
 - Progress bar visual
 
-**Filters:** By week/month range, by category, by priority.
+**Filters:** By week/month range (using `concluido_em` as the date anchor), by category, by priority. Tasks without a `data_tarefa` are filtered by `concluido_em` — this is always populated when a task is marked complete.
 
 **No deletion** from history — records are permanent. (User can only delete from the Edit modal on active tasks.)
 
@@ -180,7 +180,7 @@ A centered modal overlay with the following form fields:
 | Descrição | Textarea | No |
 | Status | Select: Pendente / Em Andamento / Concluída / Cancelada | Yes |
 | Prioridade | Radio/Select: 🔴 Alta / 🟡 Média / 🟢 Baixa | Yes |
-| Categoria | Text input with datalist suggestions | No |
+| Categoria | Text input with `<datalist>` suggestions (dynamically queried from distinct `categoria` values in Supabase — shows previously-used categories) | No |
 | Data da Tarefa | Date picker | No |
 | Prazo | Datetime-local picker | No |
 
@@ -309,7 +309,7 @@ A centered modal overlay with the following form fields:
 | Chart | Type | Config notes |
 |---|---|---|
 | Status distribution | Doughnut | 4 segments (pendente/em andamento/concluída/cancelada); `cutout: '70%'`; center KPI label |
-| Tasks by day | Bar | 6 bars (Mon–Sat); colored by count volume; subtle grid `rgba(255,255,255,0.05)` |
+| Tasks by day | Bar | 7 bars (Mon–Sun, matching the board's 6 weekday columns + "Fim de Semana" split into Sat+Sun); colored by count volume; subtle grid `rgba(255,255,255,0.05)` |
 | Completion this week | Progress bar | Custom HTML — no library needed |
 
 Chart colors use the accent palette above. Grid lines: `rgba(255,255,255,0.05)`. Legend positioned above chart. Tooltips on hover showing exact count.
