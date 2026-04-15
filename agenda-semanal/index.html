@@ -32,21 +32,25 @@
   <!-- TAB NAVIGATION -->
   <nav class="tab-nav" role="tablist" aria-label="Seções do app">
     <button class="tab-btn active" data-tab="dashboard"
+            id="tab-btn-dashboard"
             role="tab" aria-selected="true" aria-controls="tab-dashboard">
       <i data-lucide="layout-dashboard" aria-hidden="true"></i>
       <span>Dashboard</span>
     </button>
     <button class="tab-btn" data-tab="semana"
+            id="tab-btn-semana"
             role="tab" aria-selected="false" aria-controls="tab-semana">
       <i data-lucide="calendar-days" aria-hidden="true"></i>
       <span>Semana</span>
     </button>
     <button class="tab-btn" data-tab="calendario"
+            id="tab-btn-calendario"
             role="tab" aria-selected="false" aria-controls="tab-calendario">
       <i data-lucide="calendar" aria-hidden="true"></i>
       <span>Calendário</span>
     </button>
     <button class="tab-btn" data-tab="historico"
+            id="tab-btn-historico"
             role="tab" aria-selected="false" aria-controls="tab-historico">
       <i data-lucide="trophy" aria-hidden="true"></i>
       <span>Histórico</span>
@@ -70,7 +74,7 @@
         </div>
         <div class="chart-card">
           <h2 class="chart-title">Tarefas por Dia</h2>
-          <canvas id="chart-days" height="220"></canvas>
+          <canvas id="chart-days" width="220" height="220"></canvas>
         </div>
       </div>
     </section>
@@ -107,9 +111,8 @@
   </button>
 
   <!-- MODAL OVERLAY -->
-  <div id="modal-overlay" class="modal-overlay hidden"
-       role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <div class="modal">
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <div class="modal-header">
         <h2 class="modal-title" id="modal-title">Nova Tarefa</h2>
         <button class="modal-close" id="modal-close" aria-label="Fechar modal">
