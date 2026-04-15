@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Agenda Semanal Pro — organize sua semana">
+  <title>Agenda Semanal Pro</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* CSS goes here — Task 3 */
+  </style>
+</head>
+<body>
+
+  <!-- ALERT BANNER -->
+  <div id="alert-banner" class="alert-banner hidden" role="alert" aria-live="polite"></div>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-left">
+      <span class="app-logo" aria-hidden="true">📅</span>
+      <h1 class="app-title">Agenda Semanal Pro</h1>
+    </div>
+    <span id="week-label" class="week-label"></span>
+  </header>
+
+  <!-- TAB NAVIGATION -->
+  <nav class="tab-nav" role="tablist" aria-label="Seções do app">
+    <button class="tab-btn active" data-tab="dashboard"
+            role="tab" aria-selected="true" aria-controls="tab-dashboard">
+      <i data-lucide="layout-dashboard" aria-hidden="true"></i>
+      <span>Dashboard</span>
+    </button>
+    <button class="tab-btn" data-tab="semana"
+            role="tab" aria-selected="false" aria-controls="tab-semana">
+      <i data-lucide="calendar-days" aria-hidden="true"></i>
+      <span>Semana</span>
+    </button>
+    <button class="tab-btn" data-tab="calendario"
+            role="tab" aria-selected="false" aria-controls="tab-calendario">
+      <i data-lucide="calendar" aria-hidden="true"></i>
+      <span>Calendário</span>
+    </button>
+    <button class="tab-btn" data-tab="historico"
+            role="tab" aria-selected="false" aria-controls="tab-historico">
+      <i data-lucide="trophy" aria-hidden="true"></i>
+      <span>Histórico</span>
+    </button>
+  </nav>
+
+  <!-- TAB PANELS -->
+  <main class="tab-content">
+
+    <section id="tab-dashboard" class="tab-panel" role="tabpanel" aria-labelledby="tab-btn-dashboard">
+      <!-- KPI tiles -->
+      <div class="kpi-grid" id="kpi-grid"></div>
+      <!-- Charts row -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <h2 class="chart-title">Status das Tarefas</h2>
+          <div class="donut-wrapper">
+            <canvas id="chart-status" width="220" height="220"></canvas>
+            <div class="donut-center" id="donut-center"></div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h2 class="chart-title">Tarefas por Dia</h2>
+          <canvas id="chart-days" height="220"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-semana" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-semana">
+      <div class="board" id="board"></div>
+    </section>
+
+    <section id="tab-calendario" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-calendario">
+      <div class="cal-header">
+        <button class="cal-nav-btn" id="cal-prev" aria-label="Mês anterior">
+          <i data-lucide="chevron-left" aria-hidden="true"></i>
+        </button>
+        <h2 class="cal-month-label" id="cal-month-label"></h2>
+        <button class="cal-nav-btn" id="cal-next" aria-label="Próximo mês">
+          <i data-lucide="chevron-right" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="cal-day-detail hidden" id="cal-day-detail"></div>
+    </section>
+
+    <section id="tab-historico" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-historico">
+      <div class="history-summary" id="history-summary"></div>
+      <div class="history-filters" id="history-filters"></div>
+      <div class="history-list" id="history-list"></div>
+    </section>
+
+  </main>
+
+  <!-- FLOATING ACTION BUTTON -->
+  <button class="fab" id="btn-add-task" aria-label="Nova tarefa">
+    <i data-lucide="plus" aria-hidden="true"></i>
+  </button>
+
+  <!-- MODAL OVERLAY -->
+  <div id="modal-overlay" class="modal-overlay hidden"
+       role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">Nova Tarefa</h2>
+        <button class="modal-close" id="modal-close" aria-label="Fechar modal">
+          <i data-lucide="x" aria-hidden="true"></i>
+        </button>
+      </div>
+      <form id="task-form" class="task-form" novalidate>
+        <div class="form-group">
+          <label for="f-nome">Nome <span class="required" aria-hidden="true">*</span></label>
+          <input type="text" id="f-nome" name="nome" required placeholder="Nome da tarefa">
+          <span class="field-error" id="err-nome" role="alert"></span>
+        </div>
+        <div class="form-group">
+          <label for="f-descricao">Descrição</label>
+          <textarea id="f-descricao" name="descricao" rows="2" placeholder="Opcional"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-status">Status</label>
+            <select id="f-status" name="status">
+              <option value="pendente">Pendente</option>
+              <option value="em_andamento">Em Andamento</option>
+              <option value="concluida">Concluída</option>
+              <option value="cancelada">Cancelada</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="f-prioridade">Prioridade</label>
+            <select id="f-prioridade" name="prioridade">
+              <option value="alta">🔴 Alta</option>
+              <option value="media" selected>🟡 Média</option>
+              <option value="baixa">🟢 Baixa</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="f-categoria">Categoria</label>
+          <input type="text" id="f-categoria" name="categoria"
+                 list="categoria-list" placeholder="Ex: Reunião, Entrega, Admin">
+          <datalist id="categoria-list"></datalist>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-data-tarefa">Data da Tarefa</label>
+            <input type="date" id="f-data-tarefa" name="data_tarefa">
+          </div>
+          <div class="form-group">
+            <label for="f-prazo">Prazo</label>
+            <input type="datetime-local" id="f-prazo" name="prazo">
+          </div>
+        </div>
+      </form>
+      <div class="modal-footer">
+        <button class="btn-danger hidden" id="btn-delete-task">
+          <i data-lucide="trash-2" aria-hidden="true"></i> Excluir
+        </button>
+        <div class="modal-footer-right">
+          <button class="btn-secondary" id="btn-cancel-modal">Cancelar</button>
+          <button class="btn-primary" id="btn-save-task">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast hidden" role="alert" aria-live="polite"></div>
+
+  <!-- CDN SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <script>
+    // JS goes here — Tasks 4–12
+  </script>
+
+</body>
+</html>
