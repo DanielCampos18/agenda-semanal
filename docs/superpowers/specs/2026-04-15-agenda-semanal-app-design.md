@@ -194,35 +194,135 @@ A centered modal overlay with the following form fields:
 
 ## Visual Design
 
-### Color Palette (dark theme, modern)
+*Generated with UI/UX Pro Max — Style: Modern Dark / Financial Dashboard. Product pattern: Productivity Tool + Calendar App.*
 
-| Token | Hex | Usage |
+### Style System
+
+**Base style:** Modern Dark (Cinema / Financial Dashboard hybrid)
+- Deep dark backgrounds with subtle layering
+- Cards with glassmorphism-lite: `rgba(255,255,255,0.04)` border, `16px` border-radius
+- Accent glow behind primary CTA button
+- Flat + Micro-interactions: every interactive element has a 150–300ms hover/press response
+- No pure black `#000000` (causes OLED smear) — use `#020617` as deepest background
+
+### Color Tokens (Financial Dashboard Dark — UI/UX Pro Max)
+
+```css
+:root {
+  /* Backgrounds */
+  --bg-deep:    #020617;   /* page background */
+  --bg-base:    #0f172a;   /* section backgrounds */
+  --bg-card:    #0e1223;   /* card surfaces */
+  --bg-muted:   #1a1e2f;   /* subtle backgrounds */
+  --bg-elevated:#1e293b;   /* hover/elevated surfaces */
+
+  /* Borders */
+  --border:     #334155;
+  --border-subtle: rgba(255,255,255,0.06);
+
+  /* Text */
+  --text-primary:  #f8fafc;
+  --text-muted:    #94a3b8;
+  --text-faint:    #475569;
+
+  /* Accents */
+  --accent-blue:   #3b82f6;  /* primary actions, active tab */
+  --accent-green:  #22c55e;  /* success, completed, ✅ */
+  --accent-amber:  #f97316;  /* warning, tomorrow */
+  --accent-yellow: #eab308;  /* 2–3 day urgency */
+  --accent-red:    #ef4444;  /* danger, overdue, high priority */
+
+  /* Semantic urgency */
+  --urgency-overdue:   #ef4444;
+  --urgency-today:     #ef4444;
+  --urgency-tomorrow:  #f97316;
+  --urgency-soon:      #eab308;
+  --urgency-ok:        #22c55e;
+
+  /* Spacing scale (4pt system) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* Radius */
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-xl:  20px;
+
+  /* Easing (premium spring) */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+```
+
+### Typography (Inter — all weights via Google Fonts CDN)
+
+```css
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+```
+
+| Element | Size | Weight | Line-height |
+|---|---|---|---|
+| KPI number | 32px | 700 | 1.1 |
+| Section header | 20px | 600 | 1.3 |
+| Card title | 16px | 500 | 1.4 |
+| Body / task name | 14px | 400 | 1.5 |
+| Label / badge | 12px | 500 | 1.3 |
+| Micro / helper | 11px | 400 | 1.4 |
+
+*Minimum body: 16px on mobile to prevent iOS auto-zoom.*
+
+### Icons
+
+**Library:** Lucide (CDN) — SVG stroke icons, consistent 1.5px stroke, `24px` default size.
+**No emojis as structural icons** — urgency labels use emoji in text only (badges), never as navigation/action icons.
+
+### Responsive Breakpoints
+
+| Breakpoint | Width | Layout behavior |
 |---|---|---|
-| `bg-base` | `#0f172a` | Page background |
-| `bg-card` | `#1e293b` | Card/panel background |
-| `bg-muted` | `#334155` | Subtle backgrounds, dividers |
-| `accent-blue` | `#3b82f6` | Primary actions, active tab |
-| `accent-green` | `#10b981` | Success, completed, low urgency |
-| `accent-amber` | `#f59e0b` | Warning, medium urgency |
-| `accent-red` | `#ef4444` | Danger, overdue, high priority |
-| `accent-orange` | `#f97316` | Tomorrow urgency |
-| `text-primary` | `#f1f5f9` | Main text |
-| `text-muted` | `#94a3b8` | Secondary text, labels |
+| Mobile | < 640px | Single column; board columns stack vertically; bottom tab bar |
+| Tablet | 640–1023px | 2–3 board columns; side-by-side charts |
+| Desktop | ≥ 1024px | Full 5–6 column board; sidebar-aware layout; wider modal (560px) |
 
-### Typography
-- Font: **Inter** (Google Fonts CDN)
-- Sizes: 12px (labels), 14px (body), 16px (card titles), 20px (section headers), 28px (KPI numbers)
+*Mobile-first implementation: base styles target 375px, then `@media (min-width: 640px)` scales up.*
 
-### Responsive Layout
-- Mobile (< 640px): Single column, tabs collapse to icon-only, board columns stack vertically
-- Tablet (640–1024px): 2-column grid for board, side-by-side charts
-- Desktop (> 1024px): Full 5-column board, side-by-side charts, wider modal
+### Animation & Micro-interactions
 
-### Animations
-- Tab switch: 150ms fade
-- Modal open/close: 200ms scale + fade
-- Task card hover: subtle elevation lift (box-shadow)
-- KPI tiles: count-up animation on load
+| Interaction | Duration | Easing | Property |
+|---|---|---|---|
+| Tab switch | 150ms | ease-out | opacity + transform (translateY 4px → 0) |
+| Modal open | 200ms | `cubic-bezier(0.16,1,0.3,1)` | scale 0.95→1 + opacity |
+| Modal close | 130ms | ease-in | scale 1→0.95 + opacity |
+| Card hover lift | 150ms | ease-out | box-shadow + translateY(-2px) |
+| Button press | 80ms | ease-in | scale 0.97 |
+| Toast appear | 200ms | ease-out | translateY + opacity |
+| KPI count-up | 600ms | ease-out | counter (JS) |
+
+*All animations respect `prefers-reduced-motion: reduce` — disable transforms/transitions when set.*
+
+### Charts (Chart.js)
+
+| Chart | Type | Config notes |
+|---|---|---|
+| Status distribution | Doughnut | 4 segments (pendente/em andamento/concluída/cancelada); `cutout: '70%'`; center KPI label |
+| Tasks by day | Bar | 6 bars (Mon–Sat); colored by count volume; subtle grid `rgba(255,255,255,0.05)` |
+| Completion this week | Progress bar | Custom HTML — no library needed |
+
+Chart colors use the accent palette above. Grid lines: `rgba(255,255,255,0.05)`. Legend positioned above chart. Tooltips on hover showing exact count.
+
+### Accessibility (WCAG AA minimum)
+
+- All text contrast ≥ 4.5:1 against their background
+- All interactive elements have visible focus rings (`outline: 2px solid var(--accent-blue)`)
+- Touch targets ≥ 44×44px (tap areas extended via padding, not just visual size)
+- `aria-label` on all icon-only buttons
+- Form fields: visible `<label>` per input, errors shown below field
+- `cursor: pointer` on all clickable elements
+- `role="alert"` on toast notifications for screen reader announcement
 
 ---
 
