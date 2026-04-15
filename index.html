@@ -545,6 +545,7 @@
     }
     .required { color: var(--accent-red); }
     input[type="text"], input[type="date"], input[type="datetime-local"],
+    input[type="email"], input[type="password"],
     textarea, select {
       background: var(--bg-muted);
       border: 1px solid var(--border);
@@ -701,172 +702,311 @@
 
     /* hidden utility */
     .hidden { display: none !important; }
+
+    /* ============================================================
+       AUTH SCREEN
+    ============================================================ */
+    .auth-screen {
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-deep);
+      padding: var(--space-4);
+    }
+    .auth-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+    }
+    .auth-logo { font-size: 40px; text-align: center; margin-bottom: var(--space-3); }
+    .auth-title { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: var(--space-1); }
+    .auth-subtitle { font-size: 14px; color: var(--text-muted); text-align: center; margin-bottom: var(--space-6); }
+    .auth-error { font-size: 13px; color: #fca5a5; min-height: 18px; margin-bottom: var(--space-2); text-align: center; }
+    .auth-error.success { color: var(--accent-green); }
+    .auth-toggle-text { text-align: center; font-size: 13px; color: var(--text-muted); margin-top: var(--space-4); }
+    .auth-link { background: none; border: none; color: var(--accent-blue); cursor: pointer; font-size: 13px; font-family: inherit; padding: 0; }
+    .auth-link:hover { text-decoration: underline; }
+
+    /* ============================================================
+       HEADER RIGHT / LOGOUT
+    ============================================================ */
+    .header-right { display: flex; align-items: center; gap: var(--space-3); }
+    .btn-logout {
+      background: var(--bg-muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 36px;
+      min-height: 36px;
+      transition: background 150ms, color 150ms, border-color 150ms;
+    }
+    .btn-logout:hover { background: rgba(239,68,68,0.1); color: #fca5a5; border-color: rgba(239,68,68,0.3); }
+
+    /* ============================================================
+       DASHBOARD TASK LIST
+    ============================================================ */
+    .dash-tasks-section { margin-top: var(--space-6); }
+    .section-title { font-size: 16px; font-weight: 600; color: var(--text-muted); margin-bottom: var(--space-3); }
+    .dash-task-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-2);
+      cursor: pointer;
+      transition: background 150ms, border-color 150ms;
+    }
+    .dash-task-item:hover { background: var(--bg-elevated); border-color: var(--accent-blue); }
+    .quick-check {
+      width: 28px; height: 28px; min-width: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: none;
+      color: var(--text-faint);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 150ms, background 150ms, color 150ms;
+      flex-shrink: 0;
+    }
+    .quick-check:hover { border-color: var(--accent-green); color: var(--accent-green); background: rgba(34,197,94,0.1); }
+    .dash-task-info { flex: 1; min-width: 0; }
+    .dash-task-name { font-size: 14px; font-weight: 500; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dash-task-meta { display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap; margin-top: 3px; }
+
+    /* ============================================================
+       CALENDAR INLINE TASK CHIPS
+    ============================================================ */
+    .cal-cell { min-height: 82px; }
+    .cal-tasks-inline { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
+    .cal-task-chip {
+      font-size: 10px; font-weight: 500;
+      padding: 1px 5px;
+      border-radius: 4px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .cal-task-chip.overdue, .cal-task-chip.today { background: rgba(239,68,68,0.2); color: #fca5a5; }
+    .cal-task-chip.tomorrow { background: rgba(249,115,22,0.2); color: #fdba74; }
+    .cal-task-chip.soon     { background: rgba(234,179,8,0.2);  color: #fde047; }
+    .cal-task-chip.ok, .cal-task-chip.none { background: rgba(59,130,246,0.15); color: #93c5fd; }
+    .cal-task-chip.done     { background: rgba(34,197,94,0.15); color: #86efac; }
+    .cal-task-chip.cancelled { background: var(--bg-muted); color: var(--text-faint); }
+    .cal-more { font-size: 10px; color: var(--text-faint); padding-left: 4px; }
   </style>
 </head>
 <body>
 
-  <!-- ALERT BANNER -->
-  <div id="alert-banner" class="alert-banner hidden" role="alert" aria-live="polite"></div>
-
-  <!-- HEADER -->
-  <header class="app-header">
-    <div class="header-left">
-      <span class="app-logo" aria-hidden="true">📅</span>
-      <h1 class="app-title">Agenda Semanal Pro</h1>
-    </div>
-    <span id="week-label" class="week-label"></span>
-  </header>
-
-  <!-- TAB NAVIGATION -->
-  <nav class="tab-nav" role="tablist" aria-label="Seções do app">
-    <button class="tab-btn active" data-tab="dashboard"
-            id="tab-btn-dashboard"
-            role="tab" aria-selected="true" aria-controls="tab-dashboard">
-      <i data-lucide="layout-dashboard" aria-hidden="true"></i>
-      <span>Dashboard</span>
-    </button>
-    <button class="tab-btn" data-tab="semana"
-            id="tab-btn-semana"
-            role="tab" aria-selected="false" aria-controls="tab-semana">
-      <i data-lucide="calendar-days" aria-hidden="true"></i>
-      <span>Semana</span>
-    </button>
-    <button class="tab-btn" data-tab="calendario"
-            id="tab-btn-calendario"
-            role="tab" aria-selected="false" aria-controls="tab-calendario">
-      <i data-lucide="calendar" aria-hidden="true"></i>
-      <span>Calendário</span>
-    </button>
-    <button class="tab-btn" data-tab="historico"
-            id="tab-btn-historico"
-            role="tab" aria-selected="false" aria-controls="tab-historico">
-      <i data-lucide="trophy" aria-hidden="true"></i>
-      <span>Histórico</span>
-    </button>
-  </nav>
-
-  <!-- TAB PANELS -->
-  <main class="tab-content">
-
-    <section id="tab-dashboard" class="tab-panel" role="tabpanel" aria-labelledby="tab-btn-dashboard">
-      <!-- KPI tiles -->
-      <div class="kpi-grid" id="kpi-grid"></div>
-      <!-- Charts row -->
-      <div class="charts-row">
-        <div class="chart-card">
-          <h2 class="chart-title">Status das Tarefas</h2>
-          <div class="donut-wrapper">
-            <canvas id="chart-status" width="220" height="220"></canvas>
-            <div class="donut-center" id="donut-center"></div>
-          </div>
-        </div>
-        <div class="chart-card">
-          <h2 class="chart-title">Tarefas por Dia</h2>
-          <canvas id="chart-days" width="220" height="220"></canvas>
-        </div>
-      </div>
-    </section>
-
-    <section id="tab-semana" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-semana">
-      <div class="board" id="board"></div>
-    </section>
-
-    <section id="tab-calendario" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-calendario">
-      <div class="cal-header">
-        <button class="cal-nav-btn" id="cal-prev" aria-label="Mês anterior">
-          <i data-lucide="chevron-left" aria-hidden="true"></i>
-        </button>
-        <h2 class="cal-month-label" id="cal-month-label"></h2>
-        <button class="cal-nav-btn" id="cal-next" aria-label="Próximo mês">
-          <i data-lucide="chevron-right" aria-hidden="true"></i>
-        </button>
-      </div>
-      <div class="cal-grid" id="cal-grid"></div>
-      <div class="cal-day-detail hidden" id="cal-day-detail"></div>
-    </section>
-
-    <section id="tab-historico" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-historico">
-      <div class="history-summary" id="history-summary"></div>
-      <div class="history-filters" id="history-filters"></div>
-      <div class="history-list" id="history-list"></div>
-    </section>
-
-  </main>
-
-  <!-- FLOATING ACTION BUTTON -->
-  <button class="fab" id="btn-add-task" aria-label="Nova tarefa">
-    <i data-lucide="plus" aria-hidden="true"></i>
-  </button>
-
-  <!-- MODAL OVERLAY -->
-  <div id="modal-overlay" class="modal-overlay hidden">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <div class="modal-header">
-        <h2 class="modal-title" id="modal-title">Nova Tarefa</h2>
-        <button class="modal-close" id="modal-close" aria-label="Fechar modal">
-          <i data-lucide="x" aria-hidden="true"></i>
-        </button>
-      </div>
-      <form id="task-form" class="task-form" novalidate>
+  <!-- AUTH SCREEN -->
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-card">
+      <div class="auth-logo">📅</div>
+      <h1 class="auth-title">Agenda Semanal Pro</h1>
+      <p class="auth-subtitle" id="auth-subtitle">Entre na sua conta</p>
+      <div class="auth-error" id="auth-error" role="alert"></div>
+      <form id="auth-form" novalidate>
         <div class="form-group">
-          <label for="f-nome">Nome <span class="required" aria-hidden="true">*</span></label>
-          <input type="text" id="f-nome" name="nome" required placeholder="Nome da tarefa">
-          <span class="field-error" id="err-nome" role="alert"></span>
+          <label for="auth-email">E-mail</label>
+          <input type="email" id="auth-email" placeholder="seu@email.com" autocomplete="email">
         </div>
         <div class="form-group">
-          <label for="f-descricao">Descrição</label>
-          <textarea id="f-descricao" name="descricao" rows="2" placeholder="Opcional"></textarea>
+          <label for="auth-password">Senha</label>
+          <input type="password" id="auth-password" placeholder="Mínimo 6 caracteres" autocomplete="current-password">
         </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="f-status">Status</label>
-            <select id="f-status" name="status">
-              <option value="pendente">Pendente</option>
-              <option value="em_andamento">Em Andamento</option>
-              <option value="concluida">Concluída</option>
-              <option value="cancelada">Cancelada</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="f-prioridade">Prioridade</label>
-            <select id="f-prioridade" name="prioridade">
-              <option value="alta">🔴 Alta</option>
-              <option value="media" selected>🟡 Média</option>
-              <option value="baixa">🟢 Baixa</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="f-categoria">Categoria</label>
-          <input type="text" id="f-categoria" name="categoria"
-                 list="categoria-list" placeholder="Ex: Reunião, Entrega, Admin">
-          <datalist id="categoria-list"></datalist>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="f-data-tarefa">Data da Tarefa</label>
-            <input type="date" id="f-data-tarefa" name="data_tarefa">
-          </div>
-          <div class="form-group">
-            <label for="f-prazo">Prazo</label>
-            <input type="datetime-local" id="f-prazo" name="prazo">
-          </div>
-        </div>
+        <button type="submit" class="btn-primary" id="auth-submit" data-mode="login" style="width:100%;margin-top:8px;">Entrar</button>
       </form>
-      <div class="modal-footer">
-        <button class="btn-danger hidden" id="btn-delete-task">
-          <i data-lucide="trash-2" aria-hidden="true"></i> Excluir
-        </button>
-        <div class="modal-footer-right">
-          <button class="btn-secondary" id="btn-cancel-modal">Cancelar</button>
-          <button class="btn-primary" id="btn-save-task">Salvar</button>
-        </div>
-      </div>
+      <p class="auth-toggle-text" id="auth-toggle-text">
+        <span id="auth-toggle-prefix">Não tem conta? </span><button class="auth-link" id="auth-toggle-btn">Criar conta</button>
+      </p>
     </div>
   </div>
 
-  <!-- TOAST -->
-  <div id="toast" class="toast hidden" role="alert" aria-live="polite"></div>
+  <!-- MAIN APP -->
+  <div id="app-container" class="hidden">
+
+    <!-- ALERT BANNER -->
+    <div id="alert-banner" class="alert-banner hidden" role="alert" aria-live="polite"></div>
+
+    <!-- HEADER -->
+    <header class="app-header">
+      <div class="header-left">
+        <span class="app-logo" aria-hidden="true">📅</span>
+        <h1 class="app-title">Agenda Semanal Pro</h1>
+      </div>
+      <div class="header-right">
+        <span id="week-label" class="week-label"></span>
+        <button class="btn-logout" id="btn-logout" aria-label="Sair da conta">
+          <i data-lucide="log-out" aria-hidden="true"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- TAB NAVIGATION -->
+    <nav class="tab-nav" role="tablist" aria-label="Seções do app">
+      <button class="tab-btn active" data-tab="dashboard"
+              id="tab-btn-dashboard"
+              role="tab" aria-selected="true" aria-controls="tab-dashboard">
+        <i data-lucide="layout-dashboard" aria-hidden="true"></i>
+        <span>Dashboard</span>
+      </button>
+      <button class="tab-btn" data-tab="semana"
+              id="tab-btn-semana"
+              role="tab" aria-selected="false" aria-controls="tab-semana">
+        <i data-lucide="calendar-days" aria-hidden="true"></i>
+        <span>Semana</span>
+      </button>
+      <button class="tab-btn" data-tab="calendario"
+              id="tab-btn-calendario"
+              role="tab" aria-selected="false" aria-controls="tab-calendario">
+        <i data-lucide="calendar" aria-hidden="true"></i>
+        <span>Calendário</span>
+      </button>
+      <button class="tab-btn" data-tab="historico"
+              id="tab-btn-historico"
+              role="tab" aria-selected="false" aria-controls="tab-historico">
+        <i data-lucide="trophy" aria-hidden="true"></i>
+        <span>Histórico</span>
+      </button>
+    </nav>
+
+    <!-- TAB PANELS -->
+    <main class="tab-content">
+
+      <section id="tab-dashboard" class="tab-panel" role="tabpanel" aria-labelledby="tab-btn-dashboard">
+        <div class="kpi-grid" id="kpi-grid"></div>
+        <div class="charts-row">
+          <div class="chart-card">
+            <h2 class="chart-title">Status das Tarefas</h2>
+            <div class="donut-wrapper">
+              <canvas id="chart-status" width="220" height="220"></canvas>
+              <div class="donut-center" id="donut-center"></div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <h2 class="chart-title">Tarefas por Dia</h2>
+            <canvas id="chart-days" width="220" height="220"></canvas>
+          </div>
+        </div>
+        <div class="dash-tasks-section">
+          <h2 class="section-title">Tarefas Pendentes</h2>
+          <div id="dash-tasks-list"></div>
+        </div>
+      </section>
+
+      <section id="tab-semana" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-semana">
+        <div class="board" id="board"></div>
+      </section>
+
+      <section id="tab-calendario" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-calendario">
+        <div class="cal-header">
+          <button class="cal-nav-btn" id="cal-prev" aria-label="Mês anterior">
+            <i data-lucide="chevron-left" aria-hidden="true"></i>
+          </button>
+          <h2 class="cal-month-label" id="cal-month-label"></h2>
+          <button class="cal-nav-btn" id="cal-next" aria-label="Próximo mês">
+            <i data-lucide="chevron-right" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+        <div class="cal-day-detail hidden" id="cal-day-detail"></div>
+      </section>
+
+      <section id="tab-historico" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-historico">
+        <div class="history-summary" id="history-summary"></div>
+        <div class="history-filters" id="history-filters"></div>
+        <div class="history-list" id="history-list"></div>
+      </section>
+
+    </main>
+
+    <!-- FLOATING ACTION BUTTON -->
+    <button class="fab" id="btn-add-task" aria-label="Nova tarefa">
+      <i data-lucide="plus" aria-hidden="true"></i>
+    </button>
+
+    <!-- MODAL OVERLAY -->
+    <div id="modal-overlay" class="modal-overlay hidden"
+         role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="modal-title">Nova Tarefa</h2>
+          <button class="modal-close" id="modal-close" aria-label="Fechar modal">
+            <i data-lucide="x" aria-hidden="true"></i>
+          </button>
+        </div>
+        <form id="task-form" class="task-form" novalidate>
+          <div class="form-group">
+            <label for="f-nome">Nome <span class="required" aria-hidden="true">*</span></label>
+            <input type="text" id="f-nome" name="nome" required placeholder="Nome da tarefa">
+            <span class="field-error" id="err-nome" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label for="f-descricao">Descrição</label>
+            <textarea id="f-descricao" name="descricao" rows="2" placeholder="Opcional"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="f-status">Status</label>
+              <select id="f-status" name="status">
+                <option value="pendente">Pendente</option>
+                <option value="em_andamento">Em Andamento</option>
+                <option value="concluida">Concluída</option>
+                <option value="cancelada">Cancelada</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="f-prioridade">Prioridade</label>
+              <select id="f-prioridade" name="prioridade">
+                <option value="alta">🔴 Alta</option>
+                <option value="media" selected>🟡 Média</option>
+                <option value="baixa">🟢 Baixa</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="f-categoria">Categoria</label>
+            <input type="text" id="f-categoria" name="categoria"
+                   list="categoria-list" placeholder="Ex: Reunião, Entrega, Admin">
+            <datalist id="categoria-list"></datalist>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="f-data-tarefa">Data da Tarefa</label>
+              <input type="date" id="f-data-tarefa" name="data_tarefa">
+            </div>
+            <div class="form-group">
+              <label for="f-prazo">Prazo</label>
+              <input type="datetime-local" id="f-prazo" name="prazo">
+            </div>
+          </div>
+        </form>
+        <div class="modal-footer">
+          <button class="btn-danger hidden" id="btn-delete-task">
+            <i data-lucide="trash-2" aria-hidden="true"></i> Excluir
+          </button>
+          <div class="modal-footer-right">
+            <button class="btn-secondary" id="btn-cancel-modal">Cancelar</button>
+            <button class="btn-primary" id="btn-save-task">Salvar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast hidden" role="alert" aria-live="polite"></div>
+
+  </div><!-- end #app-container -->
 
   <!-- CDN SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -875,7 +1015,7 @@
 
   <script>
 // ============================================================
-// CONFIGURATION — replace with your Supabase credentials
+// CONFIGURATION
 // ============================================================
 const SUPABASE_URL = 'https://rgarpmxkfpbqonamidzz.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_iWe7ZQG97lASuyA2xhsyDg_cSxsOA8I';
@@ -885,6 +1025,7 @@ const SUPABASE_KEY = 'sb_publishable_iWe7ZQG97lASuyA2xhsyDg_cSxsOA8I';
 // ============================================================
 const state = {
   tarefas: [],
+  currentUser: null,
   calendarDate: new Date(),
   calendarSelectedDay: null,
   historyFilter: { periodo: 'semana', categoria: '', prioridade: '' },
@@ -916,10 +1057,10 @@ function getUrgency(prazo, status) {
 }
 
 function getDayFromDate(dateStr) {
-  if (!dateStr) return 'Sem data';
+  if (!dateStr) return null;
   const d = new Date(dateStr + 'T12:00:00');
-  const map = {1:'Segunda',2:'Terça',3:'Quarta',4:'Quinta',5:'Sexta'};
-  return map[d.getDay()] || 'Fim de Semana';
+  const map = {1:'Segunda',2:'Terça',3:'Quarta',4:'Quinta',5:'Sexta',6:'Sábado',0:'Domingo'};
+  return map[d.getDay()] || null;
 }
 
 function getCurrentWeekRange() {
@@ -944,9 +1085,7 @@ function getWeekNumber(d) {
 }
 
 function animateCount(el, target) {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    el.textContent = target; return;
-  }
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { el.textContent = target; return; }
   let current = 0;
   const step = Math.max(1, Math.ceil(target / 30));
   const timer = setInterval(() => {
@@ -968,8 +1107,7 @@ function showToast(msg, type = 'info') {
 
 function fmtDate(isoStr) {
   if (!isoStr) return '—';
-  const d = new Date(isoStr);
-  return d.toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' });
+  return new Date(isoStr).toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' });
 }
 
 function daysBetween(a, b) {
@@ -977,9 +1115,7 @@ function daysBetween(a, b) {
 }
 
 function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 // ============================================================
@@ -993,20 +1129,23 @@ async function fetchTarefas() {
 }
 
 async function createTarefa(fields) {
-  const { error } = await db.from('tarefas').insert(fields);
+  const payload = { ...fields, user_id: state.currentUser?.id };
+  const { error } = await db.from('tarefas').insert(payload);
   if (error) { console.error('createTarefa:', error); showToast('Erro ao salvar tarefa', 'error'); return false; }
   showToast('Tarefa criada ✓');
   return true;
 }
 
 async function updateTarefa(id, fields) {
-  if (fields.status === 'concluida' && !fields.concluido_em) {
-    fields.concluido_em = new Date().toISOString();
+  const updateData = { ...fields };
+  if (updateData.status === 'concluida' && !updateData.concluido_em) {
+    updateData.concluido_em = new Date().toISOString();
   }
-  if (fields.status !== 'concluida') {
-    fields.concluido_em = null;
-  }
-  const { error } = await db.from('tarefas').update(fields).eq('id', id);
+  if (updateData.status !== 'concluida') updateData.concluido_em = null;
+  delete updateData.id;
+  delete updateData.user_id;
+  delete updateData.criado_em;
+  const { error } = await db.from('tarefas').update(updateData).eq('id', id);
   if (error) { console.error('updateTarefa:', error); showToast('Erro ao atualizar', 'error'); return false; }
   showToast('Tarefa atualizada ✓');
   return true;
@@ -1022,6 +1161,72 @@ async function deleteTarefa(id) {
 async function fetchCategories() {
   const { data } = await db.from('tarefas').select('categoria').not('categoria', 'is', null);
   return [...new Set((data || []).map(r => r.categoria).filter(Boolean))].sort();
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+
+function translateAuthError(msg) {
+  if (msg.includes('Invalid login credentials')) return 'E-mail ou senha incorretos.';
+  if (msg.includes('Email not confirmed'))        return 'Confirme seu e-mail antes de entrar.';
+  if (msg.includes('User already registered'))    return 'Este e-mail já está cadastrado.';
+  if (msg.includes('Password should be at least'))return 'A senha deve ter pelo menos 6 caracteres.';
+  if (msg.includes('invalid email'))              return 'E-mail inválido.';
+  return 'Erro: ' + msg;
+}
+
+async function handleAuthSubmit(e) {
+  e.preventDefault();
+  const email    = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  const isSignup = document.getElementById('auth-submit').dataset.mode === 'signup';
+  const errEl    = document.getElementById('auth-error');
+  const btn      = document.getElementById('auth-submit');
+
+  if (!email || !password) { errEl.textContent = 'Preencha e-mail e senha.'; errEl.className = 'auth-error'; return; }
+  errEl.textContent = '';
+  btn.disabled = true;
+  btn.textContent = isSignup ? 'Criando conta…' : 'Entrando…';
+
+  const result = isSignup
+    ? await db.auth.signUp({ email, password })
+    : await db.auth.signInWithPassword({ email, password });
+
+  btn.disabled = false;
+  btn.textContent = isSignup ? 'Criar conta' : 'Entrar';
+
+  if (result.error) { errEl.textContent = translateAuthError(result.error.message); errEl.className = 'auth-error'; return; }
+  if (isSignup && result.data && !result.data.session) {
+    errEl.textContent = '✅ Conta criada! Verifique seu e-mail para confirmar.';
+    errEl.className = 'auth-error success';
+  }
+}
+
+function initAuthUI() {
+  document.getElementById('auth-form').addEventListener('submit', handleAuthSubmit);
+
+  document.getElementById('auth-toggle-text').addEventListener('click', (e) => {
+    if (!e.target.classList.contains('auth-link')) return;
+    const btn = document.getElementById('auth-submit');
+    const sub = document.getElementById('auth-subtitle');
+    const isSignup = btn.dataset.mode === 'signup';
+    if (isSignup) {
+      btn.dataset.mode = 'login'; btn.textContent = 'Entrar'; sub.textContent = 'Entre na sua conta';
+      document.getElementById('auth-toggle-prefix').textContent = 'Não tem conta? ';
+      e.target.textContent = 'Criar conta';
+    } else {
+      btn.dataset.mode = 'signup'; btn.textContent = 'Criar conta'; sub.textContent = 'Crie sua conta grátis';
+      document.getElementById('auth-toggle-prefix').textContent = 'Já tem conta? ';
+      e.target.textContent = 'Entrar';
+    }
+    document.getElementById('auth-error').textContent = '';
+  });
+
+  document.getElementById('btn-logout').addEventListener('click', async () => {
+    await db.auth.signOut();
+    window.location.reload();
+  });
 }
 
 // ============================================================
@@ -1105,12 +1310,7 @@ async function populateCategoryDatalist() {
 async function handleModalSave() {
   const form = document.getElementById('task-form');
   const nome = form['nome'].value.trim();
-
-  if (!nome) {
-    document.getElementById('err-nome').textContent = 'Nome é obrigatório';
-    document.getElementById('f-nome').focus();
-    return;
-  }
+  if (!nome) { document.getElementById('err-nome').textContent = 'Nome é obrigatório'; document.getElementById('f-nome').focus(); return; }
   document.getElementById('err-nome').textContent = '';
 
   const fields = {
@@ -1120,38 +1320,21 @@ async function handleModalSave() {
     prioridade:  form['prioridade'].value,
     categoria:   form['categoria'].value.trim()   || null,
     data_tarefa: form['data_tarefa'].value         || null,
-    prazo:       form['prazo'].value
-                 ? new Date(form['prazo'].value).toISOString()
-                 : null,
+    prazo:       form['prazo'].value ? new Date(form['prazo'].value).toISOString() : null,
   };
 
   const btn = document.getElementById('btn-save-task');
-  btn.disabled = true;
-  btn.textContent = 'Salvando…';
-
-  let ok;
-  if (state.editingTaskId) {
-    ok = await updateTarefa(state.editingTaskId, fields);
-  } else {
-    ok = await createTarefa(fields);
-  }
-
-  btn.disabled = false;
-  btn.textContent = 'Salvar';
-  if (ok) {
-    closeModal();
-    await refreshAll();
-  }
+  btn.disabled = true; btn.textContent = 'Salvando…';
+  const ok = state.editingTaskId ? await updateTarefa(state.editingTaskId, fields) : await createTarefa(fields);
+  btn.disabled = false; btn.textContent = 'Salvar';
+  if (ok) { closeModal(); await refreshAll(); }
 }
 
 async function handleModalDelete() {
   if (!state.editingTaskId) return;
   if (!confirm('Excluir esta tarefa permanentemente?')) return;
   const ok = await deleteTarefa(state.editingTaskId);
-  if (ok) {
-    closeModal();
-    await refreshAll();
-  }
+  if (ok) { closeModal(); await refreshAll(); }
 }
 
 function initModal() {
@@ -1163,15 +1346,9 @@ function initModal() {
   document.getElementById('modal-overlay').addEventListener('click', e => {
     if (e.target === document.getElementById('modal-overlay')) closeModal();
   });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeModal();
-  });
-  document.addEventListener('keydown', e => {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-      if (!document.getElementById('modal-overlay').classList.contains('hidden')) {
-        handleModalSave();
-      }
-    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && !document.getElementById('modal-overlay').classList.contains('hidden')) handleModalSave();
   });
 }
 
@@ -1182,23 +1359,15 @@ function initModal() {
 function renderAlertBanner() {
   const banner = document.getElementById('alert-banner');
   if (state.alertDismissed) { banner.classList.add('hidden'); return; }
-
-  const urgent = state.tarefas.filter(t => {
-    const u = getUrgency(t.prazo, t.status);
-    return u.level >= 3;
-  });
-
+  const urgent = state.tarefas.filter(t => getUrgency(t.prazo, t.status).level >= 3);
   if (urgent.length === 0) { banner.classList.add('hidden'); return; }
-
   const overdue  = urgent.filter(t => getUrgency(t.prazo, t.status).css === 'overdue').length;
   const today    = urgent.filter(t => getUrgency(t.prazo, t.status).css === 'today').length;
   const tomorrow = urgent.filter(t => getUrgency(t.prazo, t.status).css === 'tomorrow').length;
-
   const parts = [];
   if (overdue  > 0) parts.push(`🚨 ${overdue} atrasada${overdue > 1 ? 's' : ''}`);
   if (today    > 0) parts.push(`🔴 ${today} vence hoje`);
   if (tomorrow > 0) parts.push(`🟠 ${tomorrow} vence amanhã`);
-
   banner.innerHTML = `
     <span>${parts.join(' · ')}</span>
     <button class="alert-dismiss" aria-label="Fechar alerta"
@@ -1219,41 +1388,19 @@ function renderAlertBanner() {
 function renderDashboard() {
   renderKPIs();
   renderCharts();
+  renderDashTaskList();
 }
 
 function renderKPIs() {
   const { start, end } = getCurrentWeekRange();
-  const pendentes = state.tarefas.filter(t =>
-    t.status === 'pendente' || t.status === 'em_andamento').length;
-  const concluidas = state.tarefas.filter(t =>
-    t.status === 'concluida' &&
-    t.concluido_em &&
-    new Date(t.concluido_em) >= start &&
-    new Date(t.concluido_em) <= end
-  ).length;
-  const atrasadas = state.tarefas.filter(t => {
-    if (!t.prazo) return false;
-    if (t.status === 'concluida' || t.status === 'cancelada') return false;
-    return new Date(t.prazo) < new Date();
-  }).length;
-
+  const pendentes  = state.tarefas.filter(t => t.status === 'pendente' || t.status === 'em_andamento').length;
+  const concluidas = state.tarefas.filter(t => t.status === 'concluida' && t.concluido_em && new Date(t.concluido_em) >= start && new Date(t.concluido_em) <= end).length;
+  const atrasadas  = state.tarefas.filter(t => t.prazo && t.status !== 'concluida' && t.status !== 'cancelada' && new Date(t.prazo) < new Date()).length;
   const grid = document.getElementById('kpi-grid');
   grid.innerHTML = `
-    <div class="kpi-card">
-      <div class="kpi-label">Pendentes</div>
-      <div class="kpi-number blue" id="kpi-pendentes">0</div>
-      <div class="kpi-sublabel">tarefas ativas</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Concluídas</div>
-      <div class="kpi-number green" id="kpi-concluidas">0</div>
-      <div class="kpi-sublabel">esta semana</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Atrasadas</div>
-      <div class="kpi-number red" id="kpi-atrasadas">0</div>
-      <div class="kpi-sublabel">prazo vencido</div>
-    </div>
+    <div class="kpi-card"><div class="kpi-label">Pendentes</div><div class="kpi-number blue" id="kpi-pendentes">0</div><div class="kpi-sublabel">tarefas ativas</div></div>
+    <div class="kpi-card"><div class="kpi-label">Concluídas</div><div class="kpi-number green" id="kpi-concluidas">0</div><div class="kpi-sublabel">esta semana</div></div>
+    <div class="kpi-card"><div class="kpi-label">Atrasadas</div><div class="kpi-number red" id="kpi-atrasadas">0</div><div class="kpi-sublabel">prazo vencido</div></div>
   `;
   animateCount(document.getElementById('kpi-pendentes'),  pendentes);
   animateCount(document.getElementById('kpi-concluidas'), concluidas);
@@ -1267,7 +1414,6 @@ function destroyCharts() {
 
 function renderCharts() {
   destroyCharts();
-
   const statusCounts = {
     pendente:     state.tarefas.filter(t => t.status === 'pendente').length,
     em_andamento: state.tarefas.filter(t => t.status === 'em_andamento').length,
@@ -1275,119 +1421,104 @@ function renderCharts() {
     cancelada:    state.tarefas.filter(t => t.status === 'cancelada').length,
   };
   const total = Object.values(statusCounts).reduce((a, b) => a + b, 0);
-
   const ctxStatus = document.getElementById('chart-status').getContext('2d');
   state.charts.status = new Chart(ctxStatus, {
     type: 'doughnut',
-    data: {
-      labels: ['Pendente', 'Em Andamento', 'Concluída', 'Cancelada'],
-      datasets: [{
-        data: [statusCounts.pendente, statusCounts.em_andamento, statusCounts.concluida, statusCounts.cancelada],
-        backgroundColor: ['#3b82f6','#f97316','#22c55e','#475569'],
-        borderColor: '#0e1223',
-        borderWidth: 3,
-        hoverOffset: 6,
-      }]
-    },
-    options: {
-      cutout: '70%',
-      plugins: {
-        legend: {
-          position: 'bottom',
-          labels: { color: '#94a3b8', font: { family: 'Inter', size: 12 }, padding: 12, boxWidth: 14, usePointStyle: true }
-        },
-        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}` } }
-      },
-      animation: { animateRotate: true, duration: 600 },
-    }
+    data: { labels: ['Pendente','Em Andamento','Concluída','Cancelada'], datasets: [{ data: [statusCounts.pendente, statusCounts.em_andamento, statusCounts.concluida, statusCounts.cancelada], backgroundColor: ['#3b82f6','#f97316','#22c55e','#475569'], borderColor: '#0e1223', borderWidth: 3, hoverOffset: 6 }] },
+    options: { cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { family: 'Inter', size: 12 }, padding: 12, boxWidth: 14, usePointStyle: true } }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}` } } }, animation: { animateRotate: true, duration: 600 } }
   });
-  document.getElementById('donut-center').innerHTML = `
-    <div class="donut-center-number">${total}</div>
-    <div class="donut-center-label">total</div>
-  `;
+  document.getElementById('donut-center').innerHTML = `<div class="donut-center-number">${total}</div><div class="donut-center-label">total</div>`;
 
   const dayLabels = ['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
   const dayCounts = [0,0,0,0,0,0,0];
   state.tarefas.forEach(t => {
     if (!t.data_tarefa) return;
     const dow = new Date(t.data_tarefa + 'T12:00:00').getDay();
-    const idx = dow === 0 ? 6 : dow - 1;
-    dayCounts[idx]++;
+    dayCounts[dow === 0 ? 6 : dow - 1]++;
   });
-
   const ctxDays = document.getElementById('chart-days').getContext('2d');
   state.charts.byDay = new Chart(ctxDays, {
     type: 'bar',
-    data: {
-      labels: dayLabels,
-      datasets: [{
-        label: 'Tarefas',
-        data: dayCounts,
-        backgroundColor: '#3b82f6',
-        borderRadius: 8,
-        borderSkipped: false,
-      }]
-    },
-    options: {
-      scales: {
-        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { family: 'Inter' } } },
-        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { family: 'Inter' }, stepSize: 1 }, beginAtZero: true }
-      },
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y} tarefa${ctx.parsed.y !== 1 ? 's' : ''}` } }
-      },
-      animation: { duration: 600 },
-    }
+    data: { labels: dayLabels, datasets: [{ label: 'Tarefas', data: dayCounts, backgroundColor: '#3b82f6', borderRadius: 8, borderSkipped: false }] },
+    options: { scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { family: 'Inter' } } }, y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { family: 'Inter' }, stepSize: 1 }, beginAtZero: true } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y} tarefa${ctx.parsed.y !== 1 ? 's' : ''}` } } }, animation: { duration: 600 } }
   });
+}
+
+function renderDashTaskList() {
+  const pending = state.tarefas
+    .filter(t => t.status === 'pendente' || t.status === 'em_andamento')
+    .sort((a, b) => getUrgency(b.prazo, b.status).level - getUrgency(a.prazo, a.status).level);
+  const container = document.getElementById('dash-tasks-list');
+  if (!container) return;
+  if (pending.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🎉</div>Nenhuma tarefa pendente!</div>`;
+    return;
+  }
+  container.innerHTML = pending.map(t => {
+    const u = getUrgency(t.prazo, t.status);
+    const dayLabel = getDayFromDate(t.data_tarefa);
+    return `
+      <div class="dash-task-item" onclick="openModal('${t.id}')" role="button" tabindex="0"
+           aria-label="${escapeHtml(t.nome)}" onkeydown="if(event.key==='Enter')openModal('${t.id}')">
+        <button class="quick-check" aria-label="Marcar como concluída"
+                onclick="event.stopPropagation(); quickComplete('${t.id}')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </button>
+        <div class="dash-task-info">
+          <span class="dash-task-name">${escapeHtml(t.nome)}</span>
+          <div class="dash-task-meta">
+            <span class="badge ${u.css}">${u.label}</span>
+            ${t.categoria ? `<span class="category-pill">${escapeHtml(t.categoria)}</span>` : ''}
+            ${dayLabel ? `<span style="font-size:11px;color:var(--text-faint)">${dayLabel}</span>` : ''}
+          </div>
+        </div>
+        <span class="priority-dot ${t.prioridade}" title="Prioridade ${t.prioridade}"></span>
+      </div>`;
+  }).join('');
+}
+
+async function quickComplete(taskId) {
+  const t = state.tarefas.find(x => x.id === taskId);
+  if (!t) return;
+  const ok = await updateTarefa(taskId, { ...t, status: 'concluida' });
+  if (ok) await refreshAll();
 }
 
 // ============================================================
 // RENDER — SEMANA
 // ============================================================
 
-const COLUMNS = ['Segunda','Terça','Quarta','Quinta','Sexta','Fim de Semana','Sem data'];
+const COLUMNS = ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'];
 
 function renderSemana() {
-  const active = state.tarefas.filter(t =>
-    t.status !== 'concluida' && t.status !== 'cancelada'
-  );
-
+  const active = state.tarefas.filter(t => t.status !== 'concluida' && t.status !== 'cancelada');
   const grouped = {};
   COLUMNS.forEach(c => grouped[c] = []);
   active.forEach(t => {
     const day = getDayFromDate(t.data_tarefa);
-    if (grouped[day] !== undefined) grouped[day].push(t);
-    else grouped['Sem data'].push(t);
+    if (day && grouped[day] !== undefined) grouped[day].push(t);
   });
-
   const board = document.getElementById('board');
   board.innerHTML = COLUMNS.map(col => {
     const tasks = grouped[col];
     const cards = tasks.length === 0
       ? `<div class="empty-state" style="padding:var(--space-4);font-size:12px;">Sem tarefas</div>`
       : tasks.map(t => renderTaskCard(t)).join('');
-
     return `
       <div class="board-col">
-        <div class="board-col-header">
-          <span>${col}</span>
-          <span class="col-count">${tasks.length}</span>
-        </div>
+        <div class="board-col-header"><span>${col}</span><span class="col-count">${tasks.length}</span></div>
         ${cards}
-        <button class="btn-add-col" onclick="openModal()" aria-label="Adicionar tarefa em ${col}">
-          + Adicionar
-        </button>
-      </div>
-    `;
+        <button class="btn-add-col" onclick="openModal()" aria-label="Adicionar tarefa em ${col}">+ Adicionar</button>
+      </div>`;
   }).join('');
 }
 
 function renderTaskCard(t) {
   const u = getUrgency(t.prazo, t.status);
-  const catPill = t.categoria
-    ? `<span class="category-pill">${escapeHtml(t.categoria)}</span>`
-    : '';
+  const catPill = t.categoria ? `<span class="category-pill">${escapeHtml(t.categoria)}</span>` : '';
   return `
     <div class="task-card" onclick="openModal('${t.id}')" role="button" tabindex="0"
          aria-label="${escapeHtml(t.nome)}" onkeydown="if(event.key==='Enter')openModal('${t.id}')">
@@ -1397,57 +1528,49 @@ function renderTaskCard(t) {
         <span class="badge ${u.css}">${u.label}</span>
         ${catPill}
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
 // ============================================================
 // RENDER — CALENDÁRIO
 // ============================================================
 
-const MONTH_NAMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
-                     'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-const DAY_ABBR = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const MONTH_NAMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const DAY_ABBR    = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 
 function renderCalendario() {
   const year  = state.calendarDate.getFullYear();
   const month = state.calendarDate.getMonth();
-
   document.getElementById('cal-month-label').textContent = `${MONTH_NAMES[month]} ${year}`;
-
   const firstDay  = new Date(year, month, 1).getDay();
   const daysInMon = new Date(year, month + 1, 0).getDate();
   const today     = new Date();
-
   const grid = document.getElementById('cal-grid');
   let html = DAY_ABBR.map(d => `<div class="cal-day-name">${d}</div>`).join('');
-
   for (let i = 0; i < firstDay; i++) html += `<div class="cal-cell other-month"></div>`;
-
   for (let d = 1; d <= daysInMon; d++) {
     const dateStr    = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const isToday    = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
     const isSelected = state.calendarSelectedDay === dateStr;
-
-    const dayTasks = state.tarefas.filter(t => t.data_tarefa === dateStr);
-    const dots = dayTasks.map(t => {
+    const dayTasks   = state.tarefas.filter(t => t.data_tarefa === dateStr);
+    const visible    = dayTasks.slice(0, 3);
+    const more       = dayTasks.length - visible.length;
+    const chips = visible.map(t => {
       const u = getUrgency(t.prazo, t.status);
-      return `<div class="cal-dot ${u.css}" title="${escapeHtml(t.nome)}"></div>`;
+      const name = t.nome.length > 16 ? t.nome.slice(0, 16) + '…' : t.nome;
+      return `<div class="cal-task-chip ${u.css}" title="${escapeHtml(t.nome)}">${escapeHtml(name)}</div>`;
     }).join('');
-
+    const moreChip = more > 0 ? `<div class="cal-more">+${more} mais</div>` : '';
     html += `
       <div class="cal-cell ${isToday ? 'today-cell' : ''} ${isSelected ? 'selected-cell' : ''}"
            onclick="selectCalDay('${dateStr}')" role="button" tabindex="0"
            aria-label="${d} de ${MONTH_NAMES[month]}, ${dayTasks.length} tarefa(s)"
            onkeydown="if(event.key==='Enter')selectCalDay('${dateStr}')">
         <div class="cal-date">${d}</div>
-        <div class="cal-dots">${dots}</div>
-      </div>
-    `;
+        <div class="cal-tasks-inline">${chips}${moreChip}</div>
+      </div>`;
   }
-
   grid.innerHTML = html;
-
   if (state.calendarSelectedDay) renderCalDayDetail(state.calendarSelectedDay);
   else document.getElementById('cal-day-detail').classList.add('hidden');
 }
@@ -1458,161 +1581,93 @@ function selectCalDay(dateStr) {
 }
 
 function renderCalDayDetail(dateStr) {
-  const tasks = state.tarefas.filter(t => t.data_tarefa === dateStr);
+  const tasks  = state.tarefas.filter(t => t.data_tarefa === dateStr);
   const detail = document.getElementById('cal-day-detail');
   const d      = new Date(dateStr + 'T12:00:00');
   detail.innerHTML = `
-    <div class="cal-detail-title">
-      ${d.getDate()} de ${MONTH_NAMES[d.getMonth()]} — ${tasks.length} tarefa(s)
-    </div>
+    <div class="cal-detail-title">${d.getDate()} de ${MONTH_NAMES[d.getMonth()]} — ${tasks.length} tarefa(s)</div>
     ${tasks.length === 0
       ? `<div style="color:var(--text-faint);font-size:13px;">Nenhuma tarefa neste dia.</div>`
       : tasks.map(t => {
           const u = getUrgency(t.prazo, t.status);
-          return `
-            <div class="cal-task-row" onclick="openModal('${t.id}')" role="button" tabindex="0"
-                 onkeydown="if(event.key==='Enter')openModal('${t.id}')">
-              <span class="badge ${u.css}">${u.label}</span>
-              <span style="flex:1;font-size:13px;">${escapeHtml(t.nome)}</span>
-              ${t.categoria ? `<span class="category-pill">${escapeHtml(t.categoria)}</span>` : ''}
-            </div>
-          `;
-        }).join('')
-    }
+          return `<div class="cal-task-row" onclick="openModal('${t.id}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openModal('${t.id}')">
+            <span class="badge ${u.css}">${u.label}</span>
+            <span style="flex:1;font-size:13px;">${escapeHtml(t.nome)}</span>
+            ${t.categoria ? `<span class="category-pill">${escapeHtml(t.categoria)}</span>` : ''}
+          </div>`;
+        }).join('')}
   `;
   detail.classList.remove('hidden');
 }
 
 function initCalendar() {
-  document.getElementById('cal-prev').addEventListener('click', () => {
-    state.calendarDate.setMonth(state.calendarDate.getMonth() - 1);
-    state.calendarSelectedDay = null;
-    renderCalendario();
-  });
-  document.getElementById('cal-next').addEventListener('click', () => {
-    state.calendarDate.setMonth(state.calendarDate.getMonth() + 1);
-    state.calendarSelectedDay = null;
-    renderCalendario();
-  });
+  document.getElementById('cal-prev').addEventListener('click', () => { state.calendarDate.setMonth(state.calendarDate.getMonth() - 1); state.calendarSelectedDay = null; renderCalendario(); });
+  document.getElementById('cal-next').addEventListener('click', () => { state.calendarDate.setMonth(state.calendarDate.getMonth() + 1); state.calendarSelectedDay = null; renderCalendario(); });
 }
 
 // ============================================================
 // RENDER — HISTÓRICO
 // ============================================================
 
-function renderHistorico() {
-  renderHistoryProgress();
-  renderHistoryFilters();
-  renderHistoryList();
-}
+function renderHistorico() { renderHistoryProgress(); renderHistoryFilters(); renderHistoryList(); }
 
 function renderHistoryProgress() {
   const { start, end } = getCurrentWeekRange();
-
   const weekAll  = state.tarefas.filter(t => t.criado_em && new Date(t.criado_em) >= start && new Date(t.criado_em) <= end);
   const weekDone = weekAll.filter(t => t.status === 'concluida');
   const weekPct  = weekAll.length > 0 ? Math.round((weekDone.length / weekAll.length) * 100) : 0;
-
-  const now       = new Date();
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-  const monthDone = state.tarefas.filter(t => t.status === 'concluida' && t.concluido_em && new Date(t.concluido_em) >= monthStart);
+  const now = new Date(); const mStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const monthDone = state.tarefas.filter(t => t.status === 'concluida' && t.concluido_em && new Date(t.concluido_em) >= mStart);
   const totalDone = state.tarefas.filter(t => t.status === 'concluida').length;
-
   document.getElementById('history-summary').innerHTML = `
     <div class="progress-label">Progresso da semana — ${weekDone.length} de ${weekAll.length} tarefas (${weekPct}%)</div>
-    <div class="progress-bar-wrap">
-      <div class="progress-bar-fill" style="width:${weekPct}%"></div>
-    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${weekPct}%"></div></div>
     <div class="history-stats">
       <div class="history-stat">Este mês: <strong>${monthDone.length} concluídas</strong></div>
       <div class="history-stat">Total: <strong>${totalDone} concluídas</strong></div>
-    </div>
-  `;
+    </div>`;
 }
 
 function renderHistoryFilters() {
   const cats = [...new Set(state.tarefas.filter(t=>t.categoria).map(t=>t.categoria))].sort();
   document.getElementById('history-filters').innerHTML = `
     <select class="filter-select" id="filter-periodo" aria-label="Filtrar por período">
-      <option value="semana">Esta semana</option>
-      <option value="mes">Este mês</option>
-      <option value="todos">Todos</option>
+      <option value="semana">Esta semana</option><option value="mes">Este mês</option><option value="todos">Todos</option>
     </select>
     <select class="filter-select" id="filter-categoria" aria-label="Filtrar por categoria">
-      <option value="">Todas categorias</option>
-      ${cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('')}
+      <option value="">Todas categorias</option>${cats.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('')}
     </select>
     <select class="filter-select" id="filter-prioridade" aria-label="Filtrar por prioridade">
-      <option value="">Todas prioridades</option>
-      <option value="alta">🔴 Alta</option>
-      <option value="media">🟡 Média</option>
-      <option value="baixa">🟢 Baixa</option>
-    </select>
-  `;
+      <option value="">Todas prioridades</option><option value="alta">🔴 Alta</option><option value="media">🟡 Média</option><option value="baixa">🟢 Baixa</option>
+    </select>`;
   document.getElementById('filter-periodo').value    = state.historyFilter.periodo;
   document.getElementById('filter-categoria').value  = state.historyFilter.categoria;
   document.getElementById('filter-prioridade').value = state.historyFilter.prioridade;
-
   ['filter-periodo','filter-categoria','filter-prioridade'].forEach(id => {
-    document.getElementById(id).addEventListener('change', e => {
-      const key = id.replace('filter-','');
-      state.historyFilter[key] = e.target.value;
-      renderHistoryList();
-    });
+    document.getElementById(id).addEventListener('change', e => { state.historyFilter[id.replace('filter-','')] = e.target.value; renderHistoryList(); });
   });
 }
 
 function renderHistoryList() {
-  const now = new Date();
-  const { start: wStart, end: wEnd } = getCurrentWeekRange();
-  const mStart = new Date(now.getFullYear(), now.getMonth(), 1);
-
-  let items = state.tarefas.filter(t =>
-    t.status === 'concluida' || t.status === 'cancelada'
-  );
-
+  const now = new Date(); const { start: wStart, end: wEnd } = getCurrentWeekRange(); const mStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  let items = state.tarefas.filter(t => t.status === 'concluida' || t.status === 'cancelada');
   const { periodo, categoria, prioridade } = state.historyFilter;
-  if (periodo === 'semana') {
-    items = items.filter(t => {
-      const anchor = new Date(t.concluido_em || t.criado_em);
-      return anchor >= wStart && anchor <= wEnd;
-    });
-  } else if (periodo === 'mes') {
-    items = items.filter(t => new Date(t.concluido_em || t.criado_em) >= mStart);
-  }
+  if (periodo === 'semana') items = items.filter(t => { const a = new Date(t.concluido_em || t.criado_em); return a >= wStart && a <= wEnd; });
+  else if (periodo === 'mes') items = items.filter(t => new Date(t.concluido_em || t.criado_em) >= mStart);
   if (categoria)  items = items.filter(t => t.categoria === categoria);
   if (prioridade) items = items.filter(t => t.prioridade === prioridade);
-
   items.sort((a, b) => new Date(b.concluido_em || b.criado_em) - new Date(a.concluido_em || a.criado_em));
-
   const list = document.getElementById('history-list');
-  if (items.length === 0) {
-    list.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-state-icon">🏁</div>
-        Nenhuma tarefa concluída neste período.
-      </div>
-    `;
-    return;
-  }
-
+  if (items.length === 0) { list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🏁</div>Nenhuma tarefa concluída neste período.</div>`; return; }
   list.innerHTML = items.map(t => {
     const doneDate = t.concluido_em ? fmtDate(t.concluido_em) : '—';
-    const duration = (t.concluido_em && t.criado_em)
-      ? `${daysBetween(t.criado_em, t.concluido_em)} dias` : '';
-    const isCancelled = t.status === 'cancelada';
-    return `
-      <div class="history-item" onclick="openModal('${t.id}')" role="button" tabindex="0"
-           onkeydown="if(event.key==='Enter')openModal('${t.id}')">
-        <span class="badge ${isCancelled ? 'cancelled' : 'done'}">${isCancelled ? '🚫 Cancelada' : '✅'}</span>
-        <span class="history-item-name">${escapeHtml(t.nome)}</span>
-        ${t.categoria ? `<span class="category-pill">${escapeHtml(t.categoria)}</span>` : ''}
-        <div class="history-item-meta">
-          <span>${doneDate}</span>
-          ${duration ? `<span>${duration}</span>` : ''}
-        </div>
-      </div>
-    `;
+    const duration = (t.concluido_em && t.criado_em) ? `${daysBetween(t.criado_em, t.concluido_em)} dias` : '';
+    return `<div class="history-item" onclick="openModal('${t.id}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openModal('${t.id}')">
+      <span class="badge ${t.status === 'cancelada' ? 'cancelled' : 'done'}">${t.status === 'cancelada' ? '🚫 Cancelada' : '✅'}</span>
+      <span class="history-item-name">${escapeHtml(t.nome)}</span>
+      ${t.categoria ? `<span class="category-pill">${escapeHtml(t.categoria)}</span>` : ''}
+      <div class="history-item-meta"><span>${doneDate}</span>${duration ? `<span>${duration}</span>` : ''}</div>
+    </div>`;
   }).join('');
 }
 
@@ -1635,21 +1690,19 @@ async function refreshAll() {
 
 function subscribeRealtime() {
   db.channel('tarefas-changes')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'tarefas' }, () => {
-      refreshAll();
-    })
-    .subscribe((status) => {
-      if (status === 'SUBSCRIBED') {
-        console.log('✅ Realtime connected');
-      }
-    });
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'tarefas' }, () => refreshAll())
+    .subscribe(status => { if (status === 'SUBSCRIBED') console.log('✅ Realtime connected'); });
 }
 
 // ============================================================
 // INIT
 // ============================================================
 
-async function init() {
+let appInitialized = false;
+
+async function initApp() {
+  if (appInitialized) return;
+  appInitialized = true;
   lucide.createIcons();
   document.getElementById('week-label').textContent = getWeekLabel();
   state.tarefas = await fetchTarefas();
@@ -1659,6 +1712,35 @@ async function init() {
   renderAlertBanner();
   renderDashboard();
   subscribeRealtime();
+}
+
+async function init() {
+  initAuthUI();
+  lucide.createIcons();
+
+  const { data: { session } } = await db.auth.getSession();
+  state.currentUser = session?.user ?? null;
+
+  if (state.currentUser) {
+    document.getElementById('app-container').classList.remove('hidden');
+    document.getElementById('auth-screen').classList.add('hidden');
+    await initApp();
+  } else {
+    document.getElementById('auth-screen').classList.remove('hidden');
+    document.getElementById('app-container').classList.add('hidden');
+  }
+
+  db.auth.onAuthStateChange(async (event, session) => {
+    state.currentUser = session?.user ?? null;
+    if (state.currentUser) {
+      document.getElementById('app-container').classList.remove('hidden');
+      document.getElementById('auth-screen').classList.add('hidden');
+      await initApp();
+    } else {
+      document.getElementById('auth-screen').classList.remove('hidden');
+      document.getElementById('app-container').classList.add('hidden');
+    }
+  });
 }
 
 document.addEventListener('DOMContentLoaded', init);
