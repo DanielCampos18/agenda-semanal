@@ -2,10 +2,22 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "parecer-ciap",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8092", "-d", "C:\\Users\\admin\\Desktop"],
+      "port": 8092
+    },
+    {
       "name": "dashboard",
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "8765", "-d", "C:\\Users\\admin\\Desktop\\R-Torn"],
       "port": 8765
+    },
+    {
+      "name": "dashboard-indicadores",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8091", "-d", "C:\\Users\\admin\\Desktop\\Skills\\dashboard-indicadores"],
+      "port": 8091
     }
   ]
 }
