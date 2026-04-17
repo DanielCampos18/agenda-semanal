@@ -48,14 +48,39 @@
     :root[data-theme="light"] {
       --bg-deep:       #f1f5f9;
       --bg-base:       #ffffff;
-      --bg-card:       #f8fafc;
-      --bg-muted:      #e2e8f0;
+      --bg-card:       #ffffff;
+      --bg-muted:      #f4f6f9;
       --bg-elevated:   #cbd5e1;
-      --border:        #cbd5e1;
-      --border-subtle: rgba(0,0,0,0.08);
+      --border:        #e2e8f0;
+      --border-subtle: rgba(15,23,42,0.06);
       --text-primary:  #0f172a;
       --text-muted:    #475569;
       --text-faint:    #94a3b8;
+    }
+
+
+    /* Light mode polish */
+    [data-theme="light"] .kpi-card,
+    [data-theme="light"] .chart-card,
+    [data-theme="light"] .board-col,
+    [data-theme="light"] .task-card,
+    [data-theme="light"] .dash-task-item,
+    [data-theme="light"] .history-item {
+      border-color: transparent;
+      box-shadow: 0 1px 4px rgba(15,23,42,0.08), 0 1px 2px rgba(15,23,42,0.04);
+    }
+    [data-theme="light"] .kpi-card:hover,
+    [data-theme="light"] .task-card:hover,
+    [data-theme="light"] .dash-task-item:hover {
+      box-shadow: 0 4px 14px rgba(15,23,42,0.13), 0 2px 6px rgba(15,23,42,0.06);
+      border-color: transparent;
+    }
+    [data-theme="light"] .app-header,
+    [data-theme="light"] .tab-nav {
+      border-bottom-color: rgba(15,23,42,0.08);
+    }
+    [data-theme="light"] .modal {
+      box-shadow: 0 20px 48px rgba(15,23,42,0.18);
     }
 
     html { font-size: 16px; }
@@ -1630,7 +1655,7 @@ function renderCharts() {
   const ctxStatus = document.getElementById('chart-status').getContext('2d');
   state.charts.status = new Chart(ctxStatus, {
     type: 'doughnut',
-    data: { labels: ['Pendente','Em Andamento','Concluída','Cancelada'], datasets: [{ data: [statusCounts.pendente, statusCounts.em_andamento, statusCounts.concluida, statusCounts.cancelada], backgroundColor: ['#3b82f6','#f97316','#22c55e','#475569'], borderColor: '#0e1223', borderWidth: 3, hoverOffset: 6 }] },
+    data: { labels: ['Pendente','Em Andamento','Concluída','Cancelada'], datasets: [{ data: [statusCounts.pendente, statusCounts.em_andamento, statusCounts.concluida, statusCounts.cancelada], backgroundColor: ['#3b82f6','#f97316','#22c55e','#475569'], borderColor: document.documentElement.getAttribute('data-theme')==='light'?'#ffffff':'#0e1223', borderWidth: 3, hoverOffset: 6 }] },
     options: { cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { family: 'Inter', size: 12 }, padding: 12, boxWidth: 14, usePointStyle: true } }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}` } } }, animation: { animateRotate: true, duration: 600 } }
   });
   document.getElementById('donut-center').innerHTML = `<div class="donut-center-number">${total}</div><div class="donut-center-label">total</div>`;
@@ -1644,10 +1669,51 @@ function renderCharts() {
     dayCounts[dow === 0 ? 6 : dow - 1]++;
   });
   const ctxDays = document.getElementById('chart-days').getContext('2d');
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  const gridCol = isLight ? 'rgba(15,23,42,0.07)' : 'rgba(255,255,255,0.06)';
+  const tickCol = isLight ? '#64748b' : '#94a3b8';
+  const gradDays = ctxDays.createLinearGradient(0, 0, 0, 260);
+  gradDays.addColorStop(0, 'rgba(139,92,246,1)');
+  gradDays.addColorStop(1, 'rgba(109,40,217,0.45)');
   state.charts.byDay = new Chart(ctxDays, {
     type: 'bar',
-    data: { labels: dayLabels, datasets: [{ label: 'Tarefas', data: dayCounts, backgroundColor: '#8b5cf6', hoverBackgroundColor: '#7c3aed', borderRadius: 8, borderSkipped: false }] },
-    options: { scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { family: 'Inter' } } }, y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { family: 'Inter' }, stepSize: 1 }, beginAtZero: true } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y} tarefa${ctx.parsed.y !== 1 ? 's' : ''}` } } }, animation: { duration: 600 } }
+    data: {
+      labels: dayLabels,
+      datasets: [{
+        label: 'Tarefas', data: dayCounts,
+        backgroundColor: gradDays,
+        hoverBackgroundColor: '#7c3aed',
+        borderRadius: { topLeft: 10, topRight: 10 },
+        borderSkipped: false, borderWidth: 0,
+        barPercentage: 0.62, categoryPercentage: 0.78
+      }]
+    },
+    options: {
+      layout: { padding: { top: 8, left: 4, right: 4 } },
+      scales: {
+        x: {
+          grid: { display: false },
+          border: { display: false },
+          ticks: { color: tickCol, font: { family: 'Inter', size: 12, weight: '500' } }
+        },
+        y: {
+          grid: { color: gridCol },
+          border: { display: false },
+          ticks: { color: tickCol, font: { family: 'Inter', size: 11 }, stepSize: 1, padding: 8 },
+          beginAtZero: true
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: isLight ? '#1e293b' : 'rgba(15,23,42,0.92)',
+          titleColor: '#f8fafc', bodyColor: '#94a3b8',
+          padding: 10, cornerRadius: 8, displayColors: false,
+          callbacks: { label: ctx => ' ' + ctx.parsed.y + ' tarefa' + (ctx.parsed.y !== 1 ? 's' : '') }
+        }
+      },
+      animation: { duration: 700, easing: 'easeOutQuart' }
+    }
   });
 }
 
