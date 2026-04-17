@@ -42,6 +42,22 @@
       --header-height: 60px;
     }
 
+    /* ============================================================
+       LIGHT THEME
+    ============================================================ */
+    :root[data-theme="light"] {
+      --bg-deep:       #f1f5f9;
+      --bg-base:       #ffffff;
+      --bg-card:       #f8fafc;
+      --bg-muted:      #e2e8f0;
+      --bg-elevated:   #cbd5e1;
+      --border:        #cbd5e1;
+      --border-subtle: rgba(0,0,0,0.08);
+      --text-primary:  #0f172a;
+      --text-muted:    #475569;
+      --text-faint:    #94a3b8;
+    }
+
     html { font-size: 16px; }
 
     body {
@@ -110,6 +126,8 @@
     .app-logo { font-size: 22px; }
     .app-title { font-size: 18px; font-weight: 600; color: var(--text-primary); }
     .week-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+    .header-date-block { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+    .today-label { font-size: 12px; color: var(--text-muted); font-weight: 400; }
 
     /* ============================================================
        TAB NAVIGATION
@@ -176,9 +194,14 @@
       display: flex;
       flex-direction: column;
       gap: var(--space-2);
-      transition: box-shadow 150ms var(--ease-out), transform 150ms var(--ease-out);
+      transition: box-shadow 150ms var(--ease-out), transform 150ms var(--ease-out), border-color 150ms;
+      cursor: pointer;
     }
     .kpi-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.4); transform: translateY(-2px); }
+    .kpi-card.active-filter {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 2px rgba(59,130,246,0.25), 0 8px 24px rgba(0,0,0,0.4);
+    }
     .kpi-label { font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
     .kpi-number { font-size: 32px; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
     .kpi-number.blue   { color: var(--accent-blue); }
@@ -217,7 +240,7 @@
     ============================================================ */
     .board {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(7, 1fr);
       gap: var(--space-3);
       align-items: start;
       overflow-x: auto;
@@ -364,7 +387,7 @@
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
       padding: var(--space-2);
-      min-height: 72px;
+      min-height: 82px;
       cursor: pointer;
       transition: background 150ms, border-color 150ms;
       display: flex;
@@ -646,6 +669,28 @@
     .fab:active { transform: scale(0.95); }
 
     /* ============================================================
+       THEME TOGGLE BUTTON
+    ============================================================ */
+    .btn-theme-toggle {
+      position: fixed;
+      bottom: 28px;
+      left: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      transition: background 150ms;
+      color: var(--text-muted);
+    }
+    .btn-theme-toggle:hover { background: var(--bg-elevated); color: var(--text-primary); }
+
+    /* ============================================================
        TOAST
     ============================================================ */
     .toast {
@@ -698,6 +743,7 @@
       .modal { max-width: 100%; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
       .modal-overlay { align-items: flex-end; padding: 0; }
       .fab { bottom: 20px; right: 16px; }
+      .btn-theme-toggle { bottom: 20px; left: 16px; }
     }
 
     /* hidden utility */
@@ -755,7 +801,29 @@
        DASHBOARD TASK LIST
     ============================================================ */
     .dash-tasks-section { margin-top: var(--space-6); }
-    .section-title { font-size: 16px; font-weight: 600; color: var(--text-muted); margin-bottom: var(--space-3); }
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .section-title-clear {
+      font-size: 12px;
+      background: none;
+      border: none;
+      color: var(--text-faint);
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      margin-left: auto;
+      transition: color 150ms, background 150ms;
+    }
+    .section-title-clear:hover { color: var(--text-primary); background: var(--bg-muted); }
+
     .dash-task-item {
       display: flex;
       align-items: center;
@@ -768,7 +836,65 @@
       cursor: pointer;
       transition: background 150ms, border-color 150ms;
     }
+    .dash-task-item.expanded {
+      border-radius: 12px 12px 0 0;
+      margin-bottom: 0;
+    }
     .dash-task-item:hover { background: var(--bg-elevated); border-color: var(--accent-blue); }
+
+    .dash-task-wrapper { margin-bottom: var(--space-2); }
+
+    .dash-task-expand {
+      padding: 12px 16px;
+      background: var(--bg-muted);
+      border: 1px solid var(--border-subtle);
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+    }
+    .dash-task-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .dash-expand-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .btn-expand-complete {
+      background: rgba(34,197,94,0.15);
+      color: #86efac;
+      border: 1px solid rgba(34,197,94,0.3);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 150ms;
+    }
+    .btn-expand-complete:hover { background: rgba(34,197,94,0.25); }
+    .btn-expand-edit {
+      background: var(--bg-elevated);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 150ms, color 150ms;
+    }
+    .btn-expand-edit:hover { background: var(--bg-base); color: var(--text-primary); }
+
+    .dash-chevron {
+      margin-left: auto;
+      color: var(--text-faint);
+      transition: transform 200ms var(--ease-out);
+      flex-shrink: 0;
+    }
+    .dash-chevron.rotated { transform: rotate(180deg); }
+
     .quick-check {
       width: 28px; height: 28px; min-width: 28px;
       border-radius: 50%;
@@ -788,7 +914,6 @@
     /* ============================================================
        CALENDAR INLINE TASK CHIPS
     ============================================================ */
-    .cal-cell { min-height: 82px; }
     .cal-tasks-inline { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
     .cal-task-chip {
       font-size: 10px; font-weight: 500;
@@ -845,7 +970,10 @@
         <h1 class="app-title">Agenda Semanal Pro</h1>
       </div>
       <div class="header-right">
-        <span id="week-label" class="week-label"></span>
+        <div class="header-date-block">
+          <span id="week-label" class="week-label"></span>
+          <span id="today-label" class="today-label"></span>
+        </div>
         <button class="btn-logout" id="btn-logout" aria-label="Sair da conta">
           <i data-lucide="log-out" aria-hidden="true"></i>
         </button>
@@ -899,7 +1027,7 @@
           </div>
         </div>
         <div class="dash-tasks-section">
-          <h2 class="section-title">Tarefas Pendentes</h2>
+          <h2 class="section-title" id="dash-section-title">Tarefas Pendentes</h2>
           <div id="dash-tasks-list"></div>
         </div>
       </section>
@@ -933,6 +1061,11 @@
     <!-- FLOATING ACTION BUTTON -->
     <button class="fab" id="btn-add-task" aria-label="Nova tarefa">
       <i data-lucide="plus" aria-hidden="true"></i>
+    </button>
+
+    <!-- THEME TOGGLE BUTTON -->
+    <button class="btn-theme-toggle" id="btn-theme-toggle" aria-label="Alternar tema">
+      <i data-lucide="sun" id="theme-icon" aria-hidden="true"></i>
     </button>
 
     <!-- MODAL OVERLAY -->
@@ -982,12 +1115,23 @@
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="f-data-tarefa">Data da Tarefa</label>
+              <label for="f-data-tarefa">Data de Solicitação</label>
               <input type="date" id="f-data-tarefa" name="data_tarefa">
             </div>
             <div class="form-group">
               <label for="f-prazo">Prazo</label>
               <input type="datetime-local" id="f-prazo" name="prazo">
+            </div>
+          </div>
+          <!-- Requires: ALTER TABLE tarefas ADD COLUMN IF NOT EXISTS recorrente TEXT; -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="f-recorrente">Recorrente</label>
+              <select id="f-recorrente" name="recorrente">
+                <option value="">Não recorrente</option>
+                <option value="diaria">🔁 Diária</option>
+                <option value="semanal">📅 Semanal</option>
+              </select>
             </div>
           </div>
         </form>
@@ -1032,6 +1176,8 @@ const state = {
   alertDismissed: false,
   charts: { status: null, byDay: null },
   editingTaskId: null,
+  expandedTaskId: null,
+  dashFilter: null,
 };
 
 // ============================================================
@@ -1063,6 +1209,19 @@ function getDayFromDate(dateStr) {
   return map[d.getDay()] || null;
 }
 
+// Change 1: helpers to extract date/day from prazo timestamp
+function getDateFromPrazo(prazoStr) {
+  if (!prazoStr) return null;
+  return new Date(prazoStr).toISOString().slice(0, 10);
+}
+
+function getDayFromPrazo(prazoStr) {
+  if (!prazoStr) return null;
+  const d = new Date(prazoStr);
+  const map = {1:'Segunda',2:'Terça',3:'Quarta',4:'Quinta',5:'Sexta',6:'Sábado',0:'Domingo'};
+  return map[d.getDay()] || null;
+}
+
 function getCurrentWeekRange() {
   const now = new Date();
   const day = now.getDay();
@@ -1082,6 +1241,14 @@ function getWeekLabel() {
 function getWeekNumber(d) {
   const onejan = new Date(d.getFullYear(), 0, 1);
   return Math.ceil(((d - onejan) / 86400000 + onejan.getDay() + 1) / 7);
+}
+
+// Change 4: today label
+function getTodayLabel() {
+  const now = new Date();
+  const days = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+  const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  return `Hoje: ${days[now.getDay()]}, ${now.getDate()} de ${months[now.getMonth()]}`;
 }
 
 function animateCount(el, target) {
@@ -1116,6 +1283,30 @@ function daysBetween(a, b) {
 
 function escapeHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ============================================================
+// THEME
+// ============================================================
+
+function getThemeKey() { return `theme-${state.currentUser?.id || 'default'}`; }
+
+function loadTheme() {
+  const t = localStorage.getItem(getThemeKey()) || 'dark';
+  applyTheme(t);
+}
+
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  const icon = document.getElementById('theme-icon');
+  if (icon) { icon.setAttribute('data-lucide', t === 'dark' ? 'sun' : 'moon'); lucide.createIcons(); }
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  localStorage.setItem(getThemeKey(), next);
+  applyTheme(next);
 }
 
 // ============================================================
@@ -1279,6 +1470,7 @@ function openModal(taskId = null) {
     form['prioridade'].value  = t.prioridade  || 'media';
     form['categoria'].value   = t.categoria   || '';
     form['data_tarefa'].value = t.data_tarefa || '';
+    form['recorrente'].value  = t.recorrente  || '';
     if (t.prazo) {
       const local = new Date(t.prazo);
       const pad = n => String(n).padStart(2,'0');
@@ -1321,6 +1513,7 @@ async function handleModalSave() {
     categoria:   form['categoria'].value.trim()   || null,
     data_tarefa: form['data_tarefa'].value         || null,
     prazo:       form['prazo'].value ? new Date(form['prazo'].value).toISOString() : null,
+    recorrente:  form['recorrente'].value          || null,
   };
 
   const btn = document.getElementById('btn-save-task');
@@ -1391,6 +1584,13 @@ function renderDashboard() {
   renderDashTaskList();
 }
 
+// Change 3: KPI filter helpers
+function setDashFilter(f) {
+  state.dashFilter = (state.dashFilter === f) ? null : f;
+  renderKPIs();
+  renderDashTaskList();
+}
+
 function renderKPIs() {
   const { start, end } = getCurrentWeekRange();
   const pendentes  = state.tarefas.filter(t => t.status === 'pendente' || t.status === 'em_andamento').length;
@@ -1398,9 +1598,15 @@ function renderKPIs() {
   const atrasadas  = state.tarefas.filter(t => t.prazo && t.status !== 'concluida' && t.status !== 'cancelada' && new Date(t.prazo) < new Date()).length;
   const grid = document.getElementById('kpi-grid');
   grid.innerHTML = `
-    <div class="kpi-card"><div class="kpi-label">Pendentes</div><div class="kpi-number blue" id="kpi-pendentes">0</div><div class="kpi-sublabel">tarefas ativas</div></div>
-    <div class="kpi-card"><div class="kpi-label">Concluídas</div><div class="kpi-number green" id="kpi-concluidas">0</div><div class="kpi-sublabel">esta semana</div></div>
-    <div class="kpi-card"><div class="kpi-label">Atrasadas</div><div class="kpi-number red" id="kpi-atrasadas">0</div><div class="kpi-sublabel">prazo vencido</div></div>
+    <div class="kpi-card${state.dashFilter === 'pendentes' ? ' active-filter' : ''}" onclick="setDashFilter('pendentes')" title="Filtrar pendentes">
+      <div class="kpi-label">Pendentes</div><div class="kpi-number blue" id="kpi-pendentes">0</div><div class="kpi-sublabel">tarefas ativas</div>
+    </div>
+    <div class="kpi-card${state.dashFilter === 'concluidas' ? ' active-filter' : ''}" onclick="setDashFilter('concluidas')" title="Filtrar concluídas">
+      <div class="kpi-label">Concluídas</div><div class="kpi-number green" id="kpi-concluidas">0</div><div class="kpi-sublabel">esta semana</div>
+    </div>
+    <div class="kpi-card${state.dashFilter === 'atrasadas' ? ' active-filter' : ''}" onclick="setDashFilter('atrasadas')" title="Filtrar atrasadas">
+      <div class="kpi-label">Atrasadas</div><div class="kpi-number red" id="kpi-atrasadas">0</div><div class="kpi-sublabel">prazo vencido</div>
+    </div>
   `;
   animateCount(document.getElementById('kpi-pendentes'),  pendentes);
   animateCount(document.getElementById('kpi-concluidas'), concluidas);
@@ -1429,53 +1635,105 @@ function renderCharts() {
   });
   document.getElementById('donut-center').innerHTML = `<div class="donut-center-number">${total}</div><div class="donut-center-label">total</div>`;
 
+  // Change 1 + 7: bar chart uses prazo date; Change 7: purple color
   const dayLabels = ['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
   const dayCounts = [0,0,0,0,0,0,0];
   state.tarefas.forEach(t => {
-    if (!t.data_tarefa) return;
-    const dow = new Date(t.data_tarefa + 'T12:00:00').getDay();
+    if (!t.prazo) return;
+    const dow = new Date(t.prazo).getDay();
     dayCounts[dow === 0 ? 6 : dow - 1]++;
   });
   const ctxDays = document.getElementById('chart-days').getContext('2d');
   state.charts.byDay = new Chart(ctxDays, {
     type: 'bar',
-    data: { labels: dayLabels, datasets: [{ label: 'Tarefas', data: dayCounts, backgroundColor: '#3b82f6', borderRadius: 8, borderSkipped: false }] },
+    data: { labels: dayLabels, datasets: [{ label: 'Tarefas', data: dayCounts, backgroundColor: '#8b5cf6', hoverBackgroundColor: '#7c3aed', borderRadius: 8, borderSkipped: false }] },
     options: { scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { family: 'Inter' } } }, y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { family: 'Inter' }, stepSize: 1 }, beginAtZero: true } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y} tarefa${ctx.parsed.y !== 1 ? 's' : ''}` } } }, animation: { duration: 600 } }
   });
 }
 
+// Change 2: expandable dash tasks; Change 3: filter by KPI
+function toggleDashExpand(id) {
+  state.expandedTaskId = (state.expandedTaskId === id) ? null : id;
+  renderDashTaskList();
+}
+
 function renderDashTaskList() {
-  const pending = state.tarefas
-    .filter(t => t.status === 'pendente' || t.status === 'em_andamento')
-    .sort((a, b) => getUrgency(b.prazo, b.status).level - getUrgency(a.prazo, a.status).level);
   const container = document.getElementById('dash-tasks-list');
+  const titleEl   = document.getElementById('dash-section-title');
   if (!container) return;
-  if (pending.length === 0) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🎉</div>Nenhuma tarefa pendente!</div>`;
+
+  let items;
+  let sectionTitle;
+
+  if (state.dashFilter === 'concluidas') {
+    items = state.tarefas
+      .filter(t => t.status === 'concluida')
+      .sort((a, b) => new Date(b.concluido_em || 0) - new Date(a.concluido_em || 0));
+    sectionTitle = 'Tarefas Concluídas';
+  } else if (state.dashFilter === 'atrasadas') {
+    items = state.tarefas
+      .filter(t => t.prazo && t.status !== 'concluida' && t.status !== 'cancelada' && new Date(t.prazo) < new Date())
+      .sort((a, b) => getUrgency(b.prazo, b.status).level - getUrgency(a.prazo, a.status).level);
+    sectionTitle = 'Tarefas Atrasadas';
+  } else {
+    items = state.tarefas
+      .filter(t => t.status === 'pendente' || t.status === 'em_andamento')
+      .sort((a, b) => getUrgency(b.prazo, b.status).level - getUrgency(a.prazo, a.status).level);
+    sectionTitle = 'Tarefas Pendentes';
+  }
+
+  // Update section title
+  if (titleEl) {
+    const clearBtn = state.dashFilter
+      ? `<button class="section-title-clear" onclick="setDashFilter(state.dashFilter)" aria-label="Limpar filtro">× Limpar</button>`
+      : '';
+    titleEl.innerHTML = `${escapeHtml(sectionTitle)} ${clearBtn}`;
+  }
+
+  if (items.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🎉</div>Nenhuma tarefa aqui!</div>`;
     return;
   }
-  container.innerHTML = pending.map(t => {
+
+  container.innerHTML = items.map(t => {
     const u = getUrgency(t.prazo, t.status);
-    const dayLabel = getDayFromDate(t.data_tarefa);
-    return `
-      <div class="dash-task-item" onclick="openModal('${t.id}')" role="button" tabindex="0"
-           aria-label="${escapeHtml(t.nome)}" onkeydown="if(event.key==='Enter')openModal('${t.id}')">
-        <button class="quick-check" aria-label="Marcar como concluída"
-                onclick="event.stopPropagation(); quickComplete('${t.id}')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-               fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
-        </button>
-        <div class="dash-task-info">
-          <span class="dash-task-name">${escapeHtml(t.nome)}</span>
-          <div class="dash-task-meta">
-            <span class="badge ${u.css}">${u.label}</span>
-            ${t.categoria ? `<span class="category-pill">${escapeHtml(t.categoria)}</span>` : ''}
-            ${dayLabel ? `<span style="font-size:11px;color:var(--text-faint)">${dayLabel}</span>` : ''}
-          </div>
+    const isExpanded = state.expandedTaskId === t.id;
+    const recIcon = t.recorrente === 'diaria' ? ' 🔁' : t.recorrente === 'semanal' ? ' 📅' : '';
+    const expandContent = isExpanded ? `
+      <div class="dash-task-expand">
+        <p class="dash-task-desc">${t.descricao ? escapeHtml(t.descricao) : 'Sem descrição.'}</p>
+        <div class="dash-expand-actions">
+          <span class="badge ${u.css}">${u.label}</span>
+          ${t.categoria ? `<span class="category-pill">${escapeHtml(t.categoria)}</span>` : ''}
+          <button class="btn-expand-complete" onclick="event.stopPropagation(); quickComplete('${t.id}')">✓ Concluir</button>
+          <button class="btn-expand-edit" onclick="event.stopPropagation(); openModal('${t.id}')">Editar</button>
         </div>
-        <span class="priority-dot ${t.prioridade}" title="Prioridade ${t.prioridade}"></span>
+      </div>` : '';
+    return `
+      <div class="dash-task-wrapper">
+        <div class="dash-task-item${isExpanded ? ' expanded' : ''}"
+             onclick="toggleDashExpand('${t.id}')"
+             role="button" tabindex="0"
+             aria-label="${escapeHtml(t.nome)}"
+             onkeydown="if(event.key==='Enter')toggleDashExpand('${t.id}')">
+          <button class="quick-check" aria-label="Marcar como concluída"
+                  onclick="event.stopPropagation(); quickComplete('${t.id}')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </button>
+          <div class="dash-task-info">
+            <span class="dash-task-name">${escapeHtml(t.nome)}${recIcon}</span>
+            <div class="dash-task-meta">
+              <span class="badge ${u.css}">${u.label}</span>
+              ${t.categoria ? `<span class="category-pill">${escapeHtml(t.categoria)}</span>` : ''}
+            </div>
+          </div>
+          <span class="priority-dot ${t.prioridade}" title="Prioridade ${t.prioridade}"></span>
+          <svg class="dash-chevron${isExpanded ? ' rotated' : ''}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        ${expandContent}
       </div>`;
   }).join('');
 }
@@ -1493,23 +1751,34 @@ async function quickComplete(taskId) {
 
 const COLUMNS = ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'];
 
+// Change 1 + 6: group by prazo day; recurring logic
 function renderSemana() {
   const active = state.tarefas.filter(t => t.status !== 'concluida' && t.status !== 'cancelada');
   const grouped = {};
   COLUMNS.forEach(c => grouped[c] = []);
+
   active.forEach(t => {
-    const day = getDayFromDate(t.data_tarefa);
-    if (day && grouped[day] !== undefined) grouped[day].push(t);
+    if (t.recorrente === 'diaria') {
+      // Show in ALL columns
+      COLUMNS.forEach(col => grouped[col].push(t));
+    } else {
+      // semanal or non-recurring: use prazo day
+      const day = getDayFromPrazo(t.prazo);
+      if (day && grouped[day] !== undefined) grouped[day].push(t);
+    }
   });
+
   const board = document.getElementById('board');
   board.innerHTML = COLUMNS.map(col => {
     const tasks = grouped[col];
-    const cards = tasks.length === 0
+    // Deduplicate (diaria tasks added to all cols)
+    const unique = tasks.filter((t, i, arr) => arr.findIndex(x => x.id === t.id) === i);
+    const cards = unique.length === 0
       ? `<div class="empty-state" style="padding:var(--space-4);font-size:12px;">Sem tarefas</div>`
-      : tasks.map(t => renderTaskCard(t)).join('');
+      : unique.map(t => renderTaskCard(t)).join('');
     return `
       <div class="board-col">
-        <div class="board-col-header"><span>${col}</span><span class="col-count">${tasks.length}</span></div>
+        <div class="board-col-header"><span>${col}</span><span class="col-count">${unique.length}</span></div>
         ${cards}
         <button class="btn-add-col" onclick="openModal()" aria-label="Adicionar tarefa em ${col}">+ Adicionar</button>
       </div>`;
@@ -1519,10 +1788,11 @@ function renderSemana() {
 function renderTaskCard(t) {
   const u = getUrgency(t.prazo, t.status);
   const catPill = t.categoria ? `<span class="category-pill">${escapeHtml(t.categoria)}</span>` : '';
+  const recIcon = t.recorrente === 'diaria' ? ' 🔁' : t.recorrente === 'semanal' ? ' 📅' : '';
   return `
     <div class="task-card" onclick="openModal('${t.id}')" role="button" tabindex="0"
          aria-label="${escapeHtml(t.nome)}" onkeydown="if(event.key==='Enter')openModal('${t.id}')">
-      <div class="task-name">${escapeHtml(t.nome)}</div>
+      <div class="task-name">${escapeHtml(t.nome)}${recIcon}</div>
       <div class="task-meta">
         <span class="priority-dot ${t.prioridade}" title="Prioridade ${t.prioridade}"></span>
         <span class="badge ${u.css}">${u.label}</span>
@@ -1538,6 +1808,7 @@ function renderTaskCard(t) {
 const MONTH_NAMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const DAY_ABBR    = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 
+// Change 1 + 6: use prazo date for positioning; recurring logic for calendar
 function renderCalendario() {
   const year  = state.calendarDate.getFullYear();
   const month = state.calendarDate.getMonth();
@@ -1552,13 +1823,29 @@ function renderCalendario() {
     const dateStr    = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const isToday    = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
     const isSelected = state.calendarSelectedDay === dateStr;
-    const dayTasks   = state.tarefas.filter(t => t.data_tarefa === dateStr);
+    const cellDate   = new Date(dateStr + 'T12:00:00');
+    const cellDow    = cellDate.getDay(); // 0=Sun...6=Sat
+
+    // Change 1: filter by prazo date; Change 6: include recurring
+    const dayTasks = state.tarefas.filter(t => {
+      if (t.recorrente === 'diaria' && t.status !== 'concluida' && t.status !== 'cancelada') {
+        return true; // show on every day
+      }
+      if (t.recorrente === 'semanal' && t.status !== 'concluida' && t.status !== 'cancelada') {
+        // show on all dates matching same day-of-week as prazo
+        const prazoDow = t.prazo ? new Date(t.prazo).getDay() : null;
+        return prazoDow === cellDow;
+      }
+      return getDateFromPrazo(t.prazo) === dateStr;
+    });
+
     const visible    = dayTasks.slice(0, 3);
     const more       = dayTasks.length - visible.length;
     const chips = visible.map(t => {
       const u = getUrgency(t.prazo, t.status);
+      const recIcon = t.recorrente === 'diaria' ? '🔁 ' : t.recorrente === 'semanal' ? '📅 ' : '';
       const name = t.nome.length > 16 ? t.nome.slice(0, 16) + '…' : t.nome;
-      return `<div class="cal-task-chip ${u.css}" title="${escapeHtml(t.nome)}">${escapeHtml(name)}</div>`;
+      return `<div class="cal-task-chip ${u.css}" title="${escapeHtml(t.nome)}">${recIcon}${escapeHtml(name)}</div>`;
     }).join('');
     const moreChip = more > 0 ? `<div class="cal-more">+${more} mais</div>` : '';
     html += `
@@ -1581,7 +1868,20 @@ function selectCalDay(dateStr) {
 }
 
 function renderCalDayDetail(dateStr) {
-  const tasks  = state.tarefas.filter(t => t.data_tarefa === dateStr);
+  const cellDate = new Date(dateStr + 'T12:00:00');
+  const cellDow  = cellDate.getDay();
+
+  const tasks = state.tarefas.filter(t => {
+    if (t.recorrente === 'diaria' && t.status !== 'concluida' && t.status !== 'cancelada') {
+      return true;
+    }
+    if (t.recorrente === 'semanal' && t.status !== 'concluida' && t.status !== 'cancelada') {
+      const prazoDow = t.prazo ? new Date(t.prazo).getDay() : null;
+      return prazoDow === cellDow;
+    }
+    return getDateFromPrazo(t.prazo) === dateStr;
+  });
+
   const detail = document.getElementById('cal-day-detail');
   const d      = new Date(dateStr + 'T12:00:00');
   detail.innerHTML = `
@@ -1590,9 +1890,10 @@ function renderCalDayDetail(dateStr) {
       ? `<div style="color:var(--text-faint);font-size:13px;">Nenhuma tarefa neste dia.</div>`
       : tasks.map(t => {
           const u = getUrgency(t.prazo, t.status);
+          const recIcon = t.recorrente === 'diaria' ? ' 🔁' : t.recorrente === 'semanal' ? ' 📅' : '';
           return `<div class="cal-task-row" onclick="openModal('${t.id}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openModal('${t.id}')">
             <span class="badge ${u.css}">${u.label}</span>
-            <span style="flex:1;font-size:13px;">${escapeHtml(t.nome)}</span>
+            <span style="flex:1;font-size:13px;">${escapeHtml(t.nome)}${recIcon}</span>
             ${t.categoria ? `<span class="category-pill">${escapeHtml(t.categoria)}</span>` : ''}
           </div>`;
         }).join('')}
@@ -1703,8 +2004,10 @@ let appInitialized = false;
 async function initApp() {
   if (appInitialized) return;
   appInitialized = true;
+  loadTheme();
   lucide.createIcons();
   document.getElementById('week-label').textContent = getWeekLabel();
+  document.getElementById('today-label').textContent = getTodayLabel();
   state.tarefas = await fetchTarefas();
   initTabs();
   initModal();
@@ -1712,6 +2015,8 @@ async function initApp() {
   renderAlertBanner();
   renderDashboard();
   subscribeRealtime();
+
+  document.getElementById('btn-theme-toggle').addEventListener('click', toggleTheme);
 }
 
 async function init() {
