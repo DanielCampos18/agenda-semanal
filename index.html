@@ -958,20 +958,116 @@
        REUNIÃO TAB
     ============================================================ */
     .reuniao-container {
-      max-width: 680px;
+      max-width: 700px;
       margin: 0 auto;
       padding: var(--space-4) 0 80px;
       display: flex;
       flex-direction: column;
-      gap: var(--space-4);
+      gap: var(--space-3);
     }
 
+    /* Toolbar */
+    .reuniao-toolbar {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .reuniao-selector-wrap {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .reuniao-selector-icon {
+      position: absolute;
+      left: 12px;
+      width: 16px;
+      height: 16px;
+      color: var(--text-muted);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .reuniao-select-chevron {
+      position: absolute;
+      right: 10px;
+      width: 14px;
+      height: 14px;
+      color: var(--text-faint);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .reuniao-select {
+      width: 100%;
+      padding: 10px 32px 10px 36px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+      appearance: none;
+      transition: border-color 150ms;
+    }
+
+    .reuniao-select:focus { border-color: var(--accent-blue); }
+
+    .reuniao-manage-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 150ms, border-color 150ms, background 150ms;
+      flex-shrink: 0;
+    }
+
+    .reuniao-manage-btn:hover { color: var(--accent-blue); border-color: var(--accent-blue); }
+    .reuniao-manage-btn i { width: 16px; height: 16px; }
+
+    .reuniao-date-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .reuniao-date-input {
+      padding: 10px 12px 10px 34px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.8rem;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 150ms;
+      width: 152px;
+      color-scheme: dark;
+    }
+
+    [data-theme="light"] .reuniao-date-input { color-scheme: light; }
+    .reuniao-date-input:focus { border-color: var(--accent-blue); }
+
+    /* Header card */
     .reuniao-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: var(--space-4);
-      padding: var(--space-6);
+      padding: var(--space-4) var(--space-6);
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
@@ -980,12 +1076,12 @@
     .reuniao-header-left {
       display: flex;
       align-items: center;
-      gap: var(--space-4);
+      gap: var(--space-3);
     }
 
     .reuniao-icon-wrap {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       border-radius: var(--radius-md);
       background: rgba(59,130,246,0.12);
       display: flex;
@@ -995,16 +1091,16 @@
       flex-shrink: 0;
     }
 
-    .reuniao-icon-wrap i { width: 22px; height: 22px; }
+    .reuniao-icon-wrap i { width: 20px; height: 20px; }
 
     .reuniao-title {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 600;
       color: var(--text-primary);
     }
 
     .reuniao-subtitle {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
       margin-top: 2px;
     }
@@ -1014,11 +1110,13 @@
       border-radius: 999px;
       background: rgba(59,130,246,0.12);
       color: var(--accent-blue);
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 600;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
+    /* Input row */
     .reuniao-input-row {
       display: flex;
       gap: var(--space-2);
@@ -1026,13 +1124,13 @@
 
     .reuniao-input {
       flex: 1;
-      padding: 12px 16px;
+      padding: 11px 14px;
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
       color: var(--text-primary);
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
       outline: none;
       transition: border-color 150ms;
     }
@@ -1044,23 +1142,25 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 12px 18px;
+      padding: 11px 16px;
       background: var(--accent-blue);
       color: #fff;
       border: none;
       border-radius: var(--radius-md);
       font-family: inherit;
-      font-size: 0.875rem;
+      font-size: 0.85rem;
       font-weight: 500;
       cursor: pointer;
       transition: opacity 150ms, transform 100ms;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .reuniao-add-btn:hover { opacity: 0.88; }
     .reuniao-add-btn:active { transform: scale(0.97); }
-    .reuniao-add-btn i { width: 16px; height: 16px; }
+    .reuniao-add-btn i { width: 15px; height: 15px; }
 
+    /* Pending list */
     .reuniao-list {
       display: flex;
       flex-direction: column;
@@ -1071,34 +1171,27 @@
       display: flex;
       align-items: center;
       gap: var(--space-3);
-      padding: 14px 16px;
+      padding: 13px 14px;
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      transition: transform 180ms var(--ease-out), opacity 180ms var(--ease-out),
-                  box-shadow 150ms, border-color 150ms;
+      transition: transform 180ms var(--ease-out), opacity 180ms var(--ease-out), box-shadow 150ms, border-color 150ms;
       animation: slideInItem 200ms var(--ease-out);
     }
 
     @keyframes slideInItem {
-      from { opacity: 0; transform: translateY(-6px); }
+      from { opacity: 0; transform: translateY(-5px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    .reuniao-item:hover {
-      border-color: var(--border);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-    }
+    .reuniao-item:hover { border-color: var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .reuniao-item.completing { opacity: 0; transform: translateX(20px) scale(0.97); }
 
-    .reuniao-item.completing {
-      opacity: 0;
-      transform: translateX(24px) scale(0.97);
-    }
-
+    /* Checkbox — square style */
     .reuniao-checkbox {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
       border: 2px solid var(--border);
       background: none;
       cursor: pointer;
@@ -1110,50 +1203,84 @@
       padding: 0;
     }
 
-    .reuniao-checkbox:hover {
-      border-color: var(--accent-green);
-    }
+    .reuniao-checkbox:hover { border-color: var(--accent-green); background: rgba(34,197,94,0.08); }
+    .reuniao-checkbox i { width: 12px; height: 12px; opacity: 0; transition: opacity 100ms; color: var(--accent-green); }
+    .reuniao-checkbox:hover i { opacity: 0.5; }
 
-    .reuniao-checkbox i { width: 11px; height: 11px; opacity: 0; transition: opacity 100ms; }
-    .reuniao-checkbox:hover i { opacity: 0.4; color: var(--accent-green); }
-
+    /* Item text — editable inline */
     .reuniao-item-text {
       flex: 1;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
       color: var(--text-primary);
       line-height: 1.4;
+      outline: none;
+      border-radius: 4px;
+      padding: 2px 4px;
+      transition: background 150ms;
+    }
+
+    .reuniao-item-text[contenteditable="true"] {
+      background: var(--bg-muted);
+      border: 1px dashed var(--accent-blue);
+      cursor: text;
+    }
+
+    .reuniao-item-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
     }
 
     .reuniao-item-num {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 600;
       color: var(--text-faint);
       background: var(--bg-muted);
       border-radius: 4px;
-      padding: 2px 7px;
-      flex-shrink: 0;
+      padding: 2px 6px;
     }
 
-    .reuniao-delete-btn {
+    .reuniao-action-btn {
       background: none;
       border: none;
       color: var(--text-faint);
       cursor: pointer;
-      padding: 4px;
-      border-radius: var(--radius-sm);
+      padding: 5px;
+      border-radius: 6px;
       display: flex;
       align-items: center;
       transition: color 150ms, background 150ms;
-      flex-shrink: 0;
     }
 
-    .reuniao-delete-btn:hover {
-      color: var(--accent-red);
-      background: rgba(239,68,68,0.1);
+    .reuniao-action-btn:hover { color: var(--text-primary); background: var(--bg-muted); }
+    .reuniao-action-btn.edit:hover { color: var(--accent-blue); background: rgba(59,130,246,0.1); }
+    .reuniao-action-btn.delete:hover { color: var(--accent-red); background: rgba(239,68,68,0.1); }
+    .reuniao-action-btn i { width: 14px; height: 14px; }
+
+    /* Edit save/cancel row */
+    .reuniao-edit-actions {
+      display: flex;
+      gap: 4px;
+      margin-top: 0;
     }
 
-    .reuniao-delete-btn i { width: 15px; height: 15px; }
+    .reuniao-save-btn, .reuniao-cancel-edit-btn {
+      font-family: inherit;
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 150ms;
+    }
 
+    .reuniao-save-btn { background: var(--accent-blue); color: #fff; }
+    .reuniao-cancel-edit-btn { background: var(--bg-muted); color: var(--text-muted); }
+    .reuniao-save-btn:hover, .reuniao-cancel-edit-btn:hover { opacity: 0.8; }
+
+    /* Empty */
     .reuniao-empty {
       display: flex;
       flex-direction: column;
@@ -1164,8 +1291,8 @@
       text-align: center;
     }
 
-    .reuniao-empty i { width: 40px; height: 40px; opacity: 0.4; }
-    .reuniao-empty p { font-size: 0.875rem; }
+    .reuniao-empty i { width: 36px; height: 36px; opacity: 0.35; }
+    .reuniao-empty p { font-size: 0.85rem; }
 
     /* Done section */
     .reuniao-done-section {
@@ -1180,21 +1307,18 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 16px;
+      padding: 13px 16px;
       background: none;
       border: none;
       cursor: pointer;
       color: var(--text-muted);
       font-family: inherit;
-      font-size: 0.875rem;
+      font-size: 0.85rem;
       font-weight: 500;
       transition: color 150ms, background 150ms;
     }
 
-    .reuniao-done-toggle:hover {
-      color: var(--text-primary);
-      background: var(--bg-muted);
-    }
+    .reuniao-done-toggle:hover { color: var(--text-primary); background: var(--bg-muted); }
 
     .reuniao-done-toggle-left {
       display: flex;
@@ -1202,26 +1326,24 @@
       gap: var(--space-2);
     }
 
-    .reuniao-done-toggle-left i { width: 16px; height: 16px; color: var(--accent-green); }
+    .reuniao-done-toggle-left i { width: 15px; height: 15px; color: var(--accent-green); }
 
     .reuniao-done-count {
       background: rgba(34,197,94,0.12);
       color: var(--accent-green);
       border-radius: 999px;
       padding: 1px 8px;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
     }
 
     .reuniao-chevron {
-      width: 16px !important;
-      height: 16px !important;
+      width: 15px !important;
+      height: 15px !important;
       transition: transform 200ms var(--ease-out);
     }
 
-    .reuniao-done-toggle[aria-expanded="true"] .reuniao-chevron {
-      transform: rotate(180deg);
-    }
+    .reuniao-done-toggle[aria-expanded="true"] .reuniao-chevron { transform: rotate(180deg); }
 
     .reuniao-done-list {
       border-top: 1px solid var(--border-subtle);
@@ -1244,9 +1366,9 @@
     }
 
     .reuniao-done-item-check {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
       background: rgba(34,197,94,0.15);
       display: flex;
       align-items: center;
@@ -1255,51 +1377,181 @@
       color: var(--accent-green);
     }
 
-    .reuniao-done-item-check i { width: 11px; height: 11px; }
+    .reuniao-done-item-check i { width: 12px; height: 12px; }
 
     .reuniao-done-item-text {
       flex: 1;
-      font-size: 0.85rem;
+      font-size: 0.83rem;
       color: var(--text-muted);
       text-decoration: line-through;
       text-decoration-color: var(--text-faint);
     }
 
     .reuniao-done-item-time {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       color: var(--text-faint);
       white-space: nowrap;
     }
 
-    .reuniao-clear-btn {
-      margin: var(--space-3) var(--space-3) var(--space-3) auto;
+    .reuniao-done-item-undo {
+      background: none;
+      border: none;
+      color: var(--text-faint);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 5px;
       display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
+      transition: color 150ms, background 150ms;
+    }
+
+    .reuniao-done-item-undo:hover { color: var(--accent-blue); background: rgba(59,130,246,0.1); }
+    .reuniao-done-item-undo i { width: 13px; height: 13px; }
+
+    .reuniao-clear-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 11px;
       background: none;
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       color: var(--text-faint);
       font-family: inherit;
-      font-size: 0.75rem;
+      font-size: 0.73rem;
       cursor: pointer;
       transition: color 150ms, border-color 150ms;
+      margin-left: auto;
+      margin-bottom: var(--space-2);
     }
 
     .reuniao-clear-btn:hover { color: var(--accent-red); border-color: var(--accent-red); }
-    .reuniao-clear-btn i { width: 13px; height: 13px; }
+    .reuniao-clear-btn i { width: 12px; height: 12px; }
+
+    /* Modal gerenciar reuniões */
+    .reuniao-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-4);
+      animation: fadeIn 150ms var(--ease-out);
+    }
+
+    .reuniao-modal-overlay.hidden { display: none; }
+
+    .reuniao-modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+      animation: slideInItem 200ms var(--ease-out);
+    }
+
+    .reuniao-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-4) var(--space-6);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .reuniao-modal-header h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .reuniao-modal-close {
+      background: none;
+      border: none;
+      color: var(--text-faint);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 6px;
+      display: flex;
+      transition: color 150ms, background 150ms;
+    }
+
+    .reuniao-modal-close:hover { color: var(--text-primary); background: var(--bg-muted); }
+    .reuniao-modal-close i { width: 16px; height: 16px; }
+
+    .reuniao-modal-body {
+      padding: var(--space-4) var(--space-6) var(--space-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .reuniao-modal-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      max-height: 260px;
+      overflow-y: auto;
+    }
+
+    .reuniao-modal-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: 10px 12px;
+      background: var(--bg-muted);
+      border-radius: var(--radius-sm);
+    }
+
+    .reuniao-modal-item-name {
+      flex: 1;
+      font-size: 0.875rem;
+      color: var(--text-primary);
+    }
+
+    .reuniao-modal-item-default {
+      font-size: 0.68rem;
+      color: var(--text-faint);
+      font-style: italic;
+    }
+
+    .reuniao-modal-delete {
+      background: none;
+      border: none;
+      color: var(--text-faint);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 5px;
+      display: flex;
+      transition: color 150ms, background 150ms;
+    }
+
+    .reuniao-modal-delete:hover { color: var(--accent-red); background: rgba(239,68,68,0.1); }
+    .reuniao-modal-delete i { width: 14px; height: 14px; }
+
+    .reuniao-modal-add {
+      display: flex;
+      gap: var(--space-2);
+    }
 
     [data-theme="light"] .reuniao-header,
     [data-theme="light"] .reuniao-item,
-    [data-theme="light"] .reuniao-done-section {
+    [data-theme="light"] .reuniao-done-section,
+    [data-theme="light"] .reuniao-select,
+    [data-theme="light"] .reuniao-date-input,
+    [data-theme="light"] .reuniao-manage-btn {
       border-color: transparent;
       box-shadow: 0 1px 4px rgba(15,23,42,0.08);
     }
 
+    [data-theme="light"] .reuniao-modal { box-shadow: 0 20px 48px rgba(15,23,42,0.18); }
+
     @media (max-width: 640px) {
       .reuniao-add-btn span { display: none; }
-      .reuniao-add-btn { padding: 12px 14px; }
+      .reuniao-add-btn { padding: 11px 13px; }
+      .reuniao-date-input { width: 130px; font-size: 0.75rem; }
     }
 
   </style>
@@ -1439,20 +1691,34 @@
       <section id="tab-reuniao" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-reuniao">
         <div class="reuniao-container">
 
-          <!-- Header -->
+          <!-- Toolbar: selecionar reunião + data -->
+          <div class="reuniao-toolbar">
+            <div class="reuniao-selector-wrap">
+              <i data-lucide="users" class="reuniao-selector-icon" aria-hidden="true"></i>
+              <select id="reuniao-select" class="reuniao-select" aria-label="Selecionar reunião"></select>
+              <i data-lucide="chevron-down" class="reuniao-select-chevron" aria-hidden="true"></i>
+            </div>
+            <button class="reuniao-manage-btn" id="reuniao-manage-btn" title="Gerenciar reuniões">
+              <i data-lucide="settings-2" aria-hidden="true"></i>
+            </button>
+            <div class="reuniao-date-wrap">
+              <i data-lucide="calendar" class="reuniao-selector-icon" aria-hidden="true"></i>
+              <input type="date" id="reuniao-date-input" class="reuniao-date-input" aria-label="Data da reunião">
+            </div>
+          </div>
+
+          <!-- Header card -->
           <div class="reuniao-header">
             <div class="reuniao-header-left">
               <div class="reuniao-icon-wrap">
-                <i data-lucide="users" aria-hidden="true"></i>
+                <i data-lucide="clipboard-list" aria-hidden="true"></i>
               </div>
               <div>
-                <h2 class="reuniao-title">Pauta da Reunião</h2>
-                <p class="reuniao-subtitle" id="reuniao-subtitle">Sócios · <span id="reuniao-date"></span></p>
+                <h2 class="reuniao-title" id="reuniao-title-display">Pauta da Reunião</h2>
+                <p class="reuniao-subtitle" id="reuniao-date-display"></p>
               </div>
             </div>
-            <div class="reuniao-header-right">
-              <span class="reuniao-badge" id="reuniao-badge">0 pendentes</span>
-            </div>
+            <span class="reuniao-badge" id="reuniao-badge">0 pendentes</span>
           </div>
 
           <!-- Input -->
@@ -1470,7 +1736,7 @@
 
           <!-- Empty state -->
           <div id="reuniao-empty" class="reuniao-empty hidden">
-            <i data-lucide="check-circle-2" aria-hidden="true"></i>
+            <i data-lucide="clipboard-list" aria-hidden="true"></i>
             <p>Pauta vazia. Adicione os itens que precisa tratar.</p>
           </div>
 
@@ -1488,6 +1754,29 @@
           </div>
 
         </div>
+
+        <!-- Modal gerenciar reuniões -->
+        <div class="reuniao-modal-overlay hidden" id="reuniao-modal-overlay">
+          <div class="reuniao-modal" role="dialog" aria-modal="true" aria-labelledby="reuniao-modal-title">
+            <div class="reuniao-modal-header">
+              <h3 id="reuniao-modal-title">Gerenciar Reuniões</h3>
+              <button class="reuniao-modal-close" id="reuniao-modal-close" aria-label="Fechar">
+                <i data-lucide="x" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="reuniao-modal-body">
+              <div id="reuniao-modal-list" class="reuniao-modal-list"></div>
+              <div class="reuniao-modal-add">
+                <input type="text" id="reuniao-new-name" class="reuniao-input" placeholder="Nome da nova reunião..." maxlength="60" autocomplete="off">
+                <button class="reuniao-add-btn" id="reuniao-modal-add-btn">
+                  <i data-lucide="plus" aria-hidden="true"></i>
+                  <span>Criar</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </section>
 
     </main>
@@ -2531,43 +2820,121 @@ document.addEventListener('DOMContentLoaded', init);
 // ============================================================
 
 (function() {
-  const STORAGE_KEY = 'reuniao_pauta_v1';
+  const STORAGE_KEY  = 'reuniao_pauta_v2';
+  const MEETINGS_KEY = 'reuniao_meetings_v1';
 
-  function getState() {
+  const DEFAULT_MEETINGS = [
+    { id: 'socios',    name: 'Reunião com Sócios',    deletable: false },
+    { id: 'comercial', name: 'Reunião Comercial',     deletable: false }
+  ];
+
+  // ---- persistence ----
+
+  function getMeetings() {
     try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { pending: [], done: [] };
-    } catch { return { pending: [], done: [] }; }
+      const stored = JSON.parse(localStorage.getItem(MEETINGS_KEY));
+      if (stored && stored.length) return stored;
+    } catch {}
+    return JSON.parse(JSON.stringify(DEFAULT_MEETINGS));
   }
 
-  function saveState(s) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+  function saveMeetings(m) {
+    localStorage.setItem(MEETINGS_KEY, JSON.stringify(m));
+  }
+
+  function getAllState() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    } catch { return {}; }
+  }
+
+  function getStateFor(meetingId, date) {
+    const all = getAllState();
+    const key = meetingId + '|' + date;
+    return all[key] || { pending: [], done: [] };
+  }
+
+  function saveStateFor(meetingId, date, s) {
+    const all = getAllState();
+    const key = meetingId + '|' + date;
+    all[key] = s;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+  }
+
+  // ---- helpers ----
+
+  function todayISO() {
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+
+  function formatDateLabel(iso) {
+    const [y, m, d] = iso.split('-');
+    const dt = new Date(+y, +m-1, +d);
+    return dt.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   }
 
   function formatTime(iso) {
-    const d = new Date(iso);
-    return d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    return new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
   }
 
-  function todayLabel() {
-    return new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+  function escapeHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  function updateBadge(s) {
-    const badge = document.getElementById('reuniao-badge');
+  function currentMeetingId() {
+    return document.getElementById('reuniao-select')?.value || getMeetings()[0]?.id;
+  }
+
+  function currentDate() {
+    return document.getElementById('reuniao-date-input')?.value || todayISO();
+  }
+
+  // ---- badge ----
+
+  function updateBadge() {
+    const s = getStateFor(currentMeetingId(), currentDate());
+    const badge     = document.getElementById('reuniao-badge');
     const doneCount = document.getElementById('reuniao-done-count');
     if (badge) badge.textContent = s.pending.length + (s.pending.length === 1 ? ' pendente' : ' pendentes');
     if (doneCount) doneCount.textContent = s.done.length;
   }
 
-  function rerenderList() {
-    const s = getState();
-    const list = document.getElementById('reuniao-pending-list');
+  // ---- render header ----
+
+  function renderHeader() {
+    const meetings = getMeetings();
+    const mid = currentMeetingId();
+    const meeting = meetings.find(m => m.id === mid) || meetings[0];
+    const titleEl = document.getElementById('reuniao-title-display');
+    const dateEl  = document.getElementById('reuniao-date-display');
+    if (titleEl) titleEl.textContent = meeting ? meeting.name : 'Pauta da Reunião';
+    if (dateEl)  dateEl.textContent  = formatDateLabel(currentDate());
+  }
+
+  // ---- render select ----
+
+  function renderSelect() {
+    const sel = document.getElementById('reuniao-select');
+    if (!sel) return;
+    const meetings = getMeetings();
+    const prev = sel.value;
+    sel.innerHTML = meetings.map(m =>
+      `<option value="${escapeHtml(m.id)}">${escapeHtml(m.name)}</option>`
+    ).join('');
+    if (prev && meetings.find(m => m.id === prev)) sel.value = prev;
+  }
+
+  // ---- render pending list ----
+
+  function renderPendingList() {
+    const s      = getStateFor(currentMeetingId(), currentDate());
+    const list   = document.getElementById('reuniao-pending-list');
     const emptyEl = document.getElementById('reuniao-empty');
-    const doneList = document.getElementById('reuniao-done-list');
     if (!list) return;
 
-    // Pending
     list.innerHTML = '';
+
     if (s.pending.length === 0) {
       emptyEl && emptyEl.classList.remove('hidden');
     } else {
@@ -2577,91 +2944,199 @@ document.addEventListener('DOMContentLoaded', init);
         el.className = 'reuniao-item';
         el.dataset.id = item.id;
         el.innerHTML = `
-          <button class="reuniao-checkbox" data-action="check" aria-label="Concluir">
+          <button class="reuniao-checkbox" aria-label="Concluir item">
             <i data-lucide="check" aria-hidden="true"></i>
           </button>
-          <span class="reuniao-item-text">${escapeHtml(item.text)}</span>
-          <span class="reuniao-item-num">#${idx + 1}</span>
-          <button class="reuniao-delete-btn" data-action="delete" aria-label="Remover">
-            <i data-lucide="x" aria-hidden="true"></i>
-          </button>
+          <span class="reuniao-item-text" data-id="${item.id}">${escapeHtml(item.text)}</span>
+          <div class="reuniao-item-actions">
+            <span class="reuniao-item-num">#${idx + 1}</span>
+            <button class="reuniao-action-btn edit" data-action="edit" aria-label="Editar">
+              <i data-lucide="pencil" aria-hidden="true"></i>
+            </button>
+            <button class="reuniao-action-btn delete" data-action="delete" aria-label="Remover">
+              <i data-lucide="x" aria-hidden="true"></i>
+            </button>
+          </div>
         `;
         list.appendChild(el);
       });
     }
 
-    // Done
-    if (doneList) {
-      doneList.innerHTML = '';
-      if (s.done.length > 0) {
-        // Clear button
-        const clearRow = document.createElement('div');
-        clearRow.style.display = 'flex';
-        clearRow.style.justifyContent = 'flex-end';
-        clearRow.style.padding = '4px 4px 0';
-        clearRow.innerHTML = `<button class="reuniao-clear-btn" id="reuniao-clear-btn">
-          <i data-lucide="trash-2"></i> Limpar tudo
-        </button>`;
-        doneList.appendChild(clearRow);
-
-        s.done.forEach(item => {
-          const el = document.createElement('div');
-          el.className = 'reuniao-done-item';
-          el.dataset.id = item.id;
-          el.innerHTML = `
-            <div class="reuniao-done-item-check">
-              <i data-lucide="check" aria-hidden="true"></i>
-            </div>
-            <span class="reuniao-done-item-text">${escapeHtml(item.text)}</span>
-            <span class="reuniao-done-item-time">${formatTime(item.completedAt)}</span>
-          `;
-          doneList.appendChild(el);
-        });
-
-        document.getElementById('reuniao-clear-btn')?.addEventListener('click', () => {
-          const st = getState(); st.done = []; saveState(st);
-          rerenderList(); updateBadge(getState()); lucide.createIcons();
-        });
-      }
-    }
-
-    updateBadge(s);
     lucide.createIcons();
-    attachListEvents();
+    attachItemEvents();
   }
 
-  function attachListEvents() {
-    // Checkbox — complete item
+  // ---- render done list ----
+
+  function renderDoneList() {
+    const s       = getStateFor(currentMeetingId(), currentDate());
+    const doneList = document.getElementById('reuniao-done-list');
+    if (!doneList) return;
+    doneList.innerHTML = '';
+
+    if (s.done.length > 0) {
+      const clearRow = document.createElement('div');
+      clearRow.style.cssText = 'display:flex;justify-content:flex-end;margin-bottom:4px';
+      clearRow.innerHTML = `<button class="reuniao-clear-btn" id="reuniao-clear-btn">
+        <i data-lucide="trash-2"></i> Limpar tudo
+      </button>`;
+      doneList.appendChild(clearRow);
+
+      s.done.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'reuniao-done-item';
+        el.dataset.id = item.id;
+        el.innerHTML = `
+          <div class="reuniao-done-item-check">
+            <i data-lucide="check" aria-hidden="true"></i>
+          </div>
+          <span class="reuniao-done-item-text">${escapeHtml(item.text)}</span>
+          <span class="reuniao-done-item-time">${formatTime(item.completedAt)}</span>
+          <button class="reuniao-done-item-undo" aria-label="Desfazer">
+            <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+          </button>
+        `;
+        doneList.appendChild(el);
+      });
+
+      document.getElementById('reuniao-clear-btn')?.addEventListener('click', () => {
+        const mid = currentMeetingId(), date = currentDate();
+        const st = getStateFor(mid, date); st.done = [];
+        saveStateFor(mid, date, st);
+        rerender();
+      });
+
+      doneList.querySelectorAll('.reuniao-done-item-undo').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const itemEl = btn.closest('.reuniao-done-item');
+          const id = itemEl.dataset.id;
+          const mid = currentMeetingId(), date = currentDate();
+          const st = getStateFor(mid, date);
+          const idx = st.done.findIndex(i => i.id === id);
+          if (idx !== -1) {
+            const [item] = st.done.splice(idx, 1);
+            delete item.completedAt;
+            st.pending.push(item);
+            saveStateFor(mid, date, st);
+          }
+          rerender();
+        });
+      });
+    }
+
+    lucide.createIcons();
+  }
+
+  function rerender() {
+    renderHeader();
+    renderPendingList();
+    renderDoneList();
+    updateBadge();
+  }
+
+  // ---- item events ----
+
+  function attachItemEvents() {
+    // Checkbox — complete
     document.querySelectorAll('#reuniao-pending-list .reuniao-checkbox').forEach(btn => {
       btn.addEventListener('click', () => {
         const itemEl = btn.closest('.reuniao-item');
         const id = itemEl.dataset.id;
         itemEl.classList.add('completing');
         setTimeout(() => {
-          const s = getState();
+          const mid = currentMeetingId(), date = currentDate();
+          const s = getStateFor(mid, date);
           const idx = s.pending.findIndex(i => i.id === id);
           if (idx !== -1) {
             const [item] = s.pending.splice(idx, 1);
             item.completedAt = new Date().toISOString();
             s.done.unshift(item);
-            saveState(s);
+            saveStateFor(mid, date, s);
           }
-          rerenderList();
+          rerender();
+          // auto-open done section
+          const toggle = document.getElementById('reuniao-done-toggle');
+          const doneList = document.getElementById('reuniao-done-list');
+          if (toggle && doneList && toggle.getAttribute('aria-expanded') === 'false') {
+            toggle.setAttribute('aria-expanded', 'true');
+            doneList.classList.remove('hidden');
+            lucide.createIcons();
+          }
         }, 180);
       });
     });
 
-    // Delete item
-    document.querySelectorAll('#reuniao-pending-list .reuniao-delete-btn').forEach(btn => {
+    // Edit
+    document.querySelectorAll('#reuniao-pending-list .reuniao-action-btn.edit').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const itemEl  = btn.closest('.reuniao-item');
+        const id      = itemEl.dataset.id;
+        const textEl  = itemEl.querySelector('.reuniao-item-text');
+        const actions = itemEl.querySelector('.reuniao-item-actions');
+        const originalText = textEl.textContent;
+
+        // Enter edit mode
+        textEl.contentEditable = 'true';
+        textEl.focus();
+        // place cursor at end
+        const range = document.createRange();
+        range.selectNodeContents(textEl);
+        range.collapse(false);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+
+        // Inject save/cancel buttons
+        const editRow = document.createElement('div');
+        editRow.className = 'reuniao-edit-actions';
+        editRow.id = 'reuniao-edit-actions-' + id;
+        editRow.innerHTML = `
+          <button class="reuniao-save-btn">Salvar</button>
+          <button class="reuniao-cancel-edit-btn">Cancelar</button>
+        `;
+        actions.style.display = 'none';
+        itemEl.appendChild(editRow);
+        lucide.createIcons();
+
+        function saveEdit() {
+          const newText = textEl.textContent.trim();
+          if (newText) {
+            const mid = currentMeetingId(), date = currentDate();
+            const s = getStateFor(mid, date);
+            const item = s.pending.find(i => i.id === id);
+            if (item) { item.text = newText; saveStateFor(mid, date, s); }
+          }
+          rerender();
+        }
+
+        function cancelEdit() {
+          textEl.contentEditable = 'false';
+          textEl.textContent = originalText;
+          editRow.remove();
+          actions.style.display = '';
+        }
+
+        editRow.querySelector('.reuniao-save-btn').addEventListener('click', saveEdit);
+        editRow.querySelector('.reuniao-cancel-edit-btn').addEventListener('click', cancelEdit);
+        textEl.addEventListener('keydown', e => {
+          if (e.key === 'Enter') { e.preventDefault(); saveEdit(); }
+          if (e.key === 'Escape') cancelEdit();
+        });
+      });
+    });
+
+    // Delete
+    document.querySelectorAll('#reuniao-pending-list .reuniao-action-btn.delete').forEach(btn => {
       btn.addEventListener('click', () => {
         const itemEl = btn.closest('.reuniao-item');
         const id = itemEl.dataset.id;
         itemEl.classList.add('completing');
         setTimeout(() => {
-          const s = getState();
+          const mid = currentMeetingId(), date = currentDate();
+          const s = getStateFor(mid, date);
           s.pending = s.pending.filter(i => i.id !== id);
-          saveState(s);
-          rerenderList();
+          saveStateFor(mid, date, s);
+          rerender();
         }, 180);
       });
     });
@@ -2680,35 +3155,125 @@ document.addEventListener('DOMContentLoaded', init);
     }
   }
 
-  function escapeHtml(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  // ---- modal gerenciar reuniões ----
+
+  function openManageModal() {
+    const overlay = document.getElementById('reuniao-modal-overlay');
+    if (!overlay) return;
+    renderModalList();
+    overlay.classList.remove('hidden');
+    lucide.createIcons();
+
+    const closeBtn = document.getElementById('reuniao-modal-close');
+    if (closeBtn && !closeBtn._bound) {
+      closeBtn._bound = true;
+      closeBtn.addEventListener('click', closeManageModal);
+    }
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeManageModal(); });
+
+    const addBtn = document.getElementById('reuniao-modal-add-btn');
+    const nameInput = document.getElementById('reuniao-new-name');
+    if (addBtn && nameInput && !addBtn._bound) {
+      addBtn._bound = true;
+      function addMeeting() {
+        const name = nameInput.value.trim();
+        if (!name) { nameInput.focus(); return; }
+        const meetings = getMeetings();
+        const newId = 'meeting_' + Date.now();
+        meetings.push({ id: newId, name, deletable: true });
+        saveMeetings(meetings);
+        nameInput.value = '';
+        renderSelect();
+        renderModalList();
+        lucide.createIcons();
+      }
+      addBtn.addEventListener('click', addMeeting);
+      nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') addMeeting(); });
+    }
   }
 
-  window.renderReuniao = function() {
-    const dateEl = document.getElementById('reuniao-date');
-    if (dateEl) dateEl.textContent = todayLabel();
+  function closeManageModal() {
+    document.getElementById('reuniao-modal-overlay')?.classList.add('hidden');
+    rerender();
+  }
 
-    rerenderList();
+  function renderModalList() {
+    const listEl = document.getElementById('reuniao-modal-list');
+    if (!listEl) return;
+    const meetings = getMeetings();
+    listEl.innerHTML = meetings.map(m => `
+      <div class="reuniao-modal-item" data-id="${escapeHtml(m.id)}">
+        <span class="reuniao-modal-item-name">${escapeHtml(m.name)}</span>
+        ${!m.deletable ? '<span class="reuniao-modal-item-default">padrão</span>' : ''}
+        ${m.deletable ? `<button class="reuniao-modal-delete" aria-label="Remover"><i data-lucide="trash-2"></i></button>` : ''}
+      </div>
+    `).join('');
+    lucide.createIcons();
 
+    listEl.querySelectorAll('.reuniao-modal-delete').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.closest('.reuniao-modal-item').dataset.id;
+        const meetings = getMeetings().filter(m => m.id !== id);
+        saveMeetings(meetings);
+        renderSelect();
+        renderModalList();
+        lucide.createIcons();
+      });
+    });
+  }
+
+  // ---- add item ----
+
+  function addItem() {
     const input = document.getElementById('reuniao-input');
+    const text = input?.value.trim();
+    if (!text) { input?.focus(); return; }
+    const mid = currentMeetingId(), date = currentDate();
+    const s = getStateFor(mid, date);
+    s.pending.push({ id: Date.now().toString(), text, createdAt: new Date().toISOString() });
+    saveStateFor(mid, date, s);
+    input.value = '';
+    rerender();
+    input.focus();
+  }
+
+  // ---- main init ----
+
+  window.renderReuniao = function() {
+    renderSelect();
+
+    const dateInput = document.getElementById('reuniao-date-input');
+    if (dateInput && !dateInput.value) dateInput.value = todayISO();
+
+    rerender();
+
+    // Select change
+    const sel = document.getElementById('reuniao-select');
+    if (sel && !sel._bound) {
+      sel._bound = true;
+      sel.addEventListener('change', rerender);
+    }
+
+    // Date change
+    if (dateInput && !dateInput._bound) {
+      dateInput._bound = true;
+      dateInput.addEventListener('change', rerender);
+    }
+
+    // Add button
     const addBtn = document.getElementById('reuniao-add-btn');
-
-    if (input && addBtn && !addBtn._bound) {
+    const input  = document.getElementById('reuniao-input');
+    if (addBtn && !addBtn._bound) {
       addBtn._bound = true;
-
-      function addItem() {
-        const text = input.value.trim();
-        if (!text) { input.focus(); return; }
-        const s = getState();
-        s.pending.push({ id: Date.now().toString(), text, createdAt: new Date().toISOString() });
-        saveState(s);
-        input.value = '';
-        rerenderList();
-        input.focus();
-      }
-
       addBtn.addEventListener('click', addItem);
-      input.addEventListener('keydown', e => { if (e.key === 'Enter') addItem(); });
+      input?.addEventListener('keydown', e => { if (e.key === 'Enter') addItem(); });
+    }
+
+    // Manage modal
+    const manageBtn = document.getElementById('reuniao-manage-btn');
+    if (manageBtn && !manageBtn._bound) {
+      manageBtn._bound = true;
+      manageBtn.addEventListener('click', openManageModal);
     }
   };
 })();
