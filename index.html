@@ -1036,31 +1036,6 @@
     .reuniao-manage-btn:hover { color: var(--accent-blue); border-color: var(--accent-blue); }
     .reuniao-manage-btn i { width: 16px; height: 16px; }
 
-    .reuniao-date-wrap {
-      position: relative;
-      display: flex;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    .reuniao-date-input {
-      padding: 10px 12px 10px 34px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      color: var(--text-primary);
-      font-family: inherit;
-      font-size: 0.8rem;
-      cursor: pointer;
-      outline: none;
-      transition: border-color 150ms;
-      width: 152px;
-      color-scheme: dark;
-    }
-
-    [data-theme="light"] .reuniao-date-input { color-scheme: light; }
-    .reuniao-date-input:focus { border-color: var(--accent-blue); }
-
     /* Header card */
     .reuniao-header {
       display: flex;
@@ -1540,7 +1515,6 @@
     [data-theme="light"] .reuniao-item,
     [data-theme="light"] .reuniao-done-section,
     [data-theme="light"] .reuniao-select,
-    [data-theme="light"] .reuniao-date-input,
     [data-theme="light"] .reuniao-manage-btn {
       border-color: transparent;
       box-shadow: 0 1px 4px rgba(15,23,42,0.08);
@@ -1551,7 +1525,6 @@
     @media (max-width: 640px) {
       .reuniao-add-btn span { display: none; }
       .reuniao-add-btn { padding: 11px 13px; }
-      .reuniao-date-input { width: 130px; font-size: 0.75rem; }
     }
 
   </style>
@@ -1691,7 +1664,7 @@
       <section id="tab-reuniao" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-reuniao">
         <div class="reuniao-container">
 
-          <!-- Toolbar: selecionar reunião + data -->
+          <!-- Toolbar: selecionar reunião -->
           <div class="reuniao-toolbar">
             <div class="reuniao-selector-wrap">
               <i data-lucide="users" class="reuniao-selector-icon" aria-hidden="true"></i>
@@ -1701,10 +1674,6 @@
             <button class="reuniao-manage-btn" id="reuniao-manage-btn" title="Gerenciar reuniões">
               <i data-lucide="settings-2" aria-hidden="true"></i>
             </button>
-            <div class="reuniao-date-wrap">
-              <i data-lucide="calendar" class="reuniao-selector-icon" aria-hidden="true"></i>
-              <input type="date" id="reuniao-date-input" class="reuniao-date-input" aria-label="Data da reunião">
-            </div>
           </div>
 
           <!-- Header card -->
@@ -1715,7 +1684,6 @@
               </div>
               <div>
                 <h2 class="reuniao-title" id="reuniao-title-display">Pauta da Reunião</h2>
-                <p class="reuniao-subtitle" id="reuniao-date-display"></p>
               </div>
             </div>
             <span class="reuniao-badge" id="reuniao-badge">0 pendentes</span>
@@ -2824,8 +2792,8 @@ document.addEventListener('DOMContentLoaded', init);
   const MEETINGS_KEY = 'reuniao_meetings_v1';
 
   const DEFAULT_MEETINGS = [
-    { id: 'socios',    name: 'Reunião com Sócios',    deletable: false },
-    { id: 'comercial', name: 'Reunião Comercial',     deletable: false }
+    { id: 'diretoria',  name: 'Reunião com a Diretoria', deletable: false },
+    { id: 'comercial',  name: 'Reunião Comercial',        deletable: false }
   ];
 
   // ---- persistence ----
@@ -2848,31 +2816,18 @@ document.addEventListener('DOMContentLoaded', init);
     } catch { return {}; }
   }
 
-  function getStateFor(meetingId, date) {
+  function getStateFor(meetingId) {
     const all = getAllState();
-    const key = meetingId + '|' + date;
-    return all[key] || { pending: [], done: [] };
+    return all[meetingId] || { pending: [], done: [] };
   }
 
-  function saveStateFor(meetingId, date, s) {
+  function saveStateFor(meetingId, s) {
     const all = getAllState();
-    const key = meetingId + '|' + date;
-    all[key] = s;
+    all[meetingId] = s;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
   }
 
   // ---- helpers ----
-
-  function todayISO() {
-    const d = new Date();
-    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-  }
-
-  function formatDateLabel(iso) {
-    const [y, m, d] = iso.split('-');
-    const dt = new Date(+y, +m-1, +d);
-    return dt.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-  }
 
   function formatTime(iso) {
     return new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
@@ -2886,14 +2841,10 @@ document.addEventListener('DOMContentLoaded', init);
     return document.getElementById('reuniao-select')?.value || getMeetings()[0]?.id;
   }
 
-  function currentDate() {
-    return document.getElementById('reuniao-date-input')?.value || todayISO();
-  }
-
   // ---- badge ----
 
   function updateBadge() {
-    const s = getStateFor(currentMeetingId(), currentDate());
+    const s = getStateFor(currentMeetingId());
     const badge     = document.getElementById('reuniao-badge');
     const doneCount = document.getElementById('reuniao-done-count');
     if (badge) badge.textContent = s.pending.length + (s.pending.length === 1 ? ' pendente' : ' pendentes');
@@ -2907,9 +2858,7 @@ document.addEventListener('DOMContentLoaded', init);
     const mid = currentMeetingId();
     const meeting = meetings.find(m => m.id === mid) || meetings[0];
     const titleEl = document.getElementById('reuniao-title-display');
-    const dateEl  = document.getElementById('reuniao-date-display');
     if (titleEl) titleEl.textContent = meeting ? meeting.name : 'Pauta da Reunião';
-    if (dateEl)  dateEl.textContent  = formatDateLabel(currentDate());
   }
 
   // ---- render select ----
@@ -2928,7 +2877,7 @@ document.addEventListener('DOMContentLoaded', init);
   // ---- render pending list ----
 
   function renderPendingList() {
-    const s      = getStateFor(currentMeetingId(), currentDate());
+    const s      = getStateFor(currentMeetingId());
     const list   = document.getElementById('reuniao-pending-list');
     const emptyEl = document.getElementById('reuniao-empty');
     if (!list) return;
@@ -2969,7 +2918,7 @@ document.addEventListener('DOMContentLoaded', init);
   // ---- render done list ----
 
   function renderDoneList() {
-    const s       = getStateFor(currentMeetingId(), currentDate());
+    const s       = getStateFor(currentMeetingId());
     const doneList = document.getElementById('reuniao-done-list');
     if (!doneList) return;
     doneList.innerHTML = '';
@@ -3000,9 +2949,9 @@ document.addEventListener('DOMContentLoaded', init);
       });
 
       document.getElementById('reuniao-clear-btn')?.addEventListener('click', () => {
-        const mid = currentMeetingId(), date = currentDate();
-        const st = getStateFor(mid, date); st.done = [];
-        saveStateFor(mid, date, st);
+        const mid = currentMeetingId();
+        const st = getStateFor(mid); st.done = [];
+        saveStateFor(mid, st);
         rerender();
       });
 
@@ -3010,14 +2959,14 @@ document.addEventListener('DOMContentLoaded', init);
         btn.addEventListener('click', () => {
           const itemEl = btn.closest('.reuniao-done-item');
           const id = itemEl.dataset.id;
-          const mid = currentMeetingId(), date = currentDate();
-          const st = getStateFor(mid, date);
+          const mid = currentMeetingId();
+          const st = getStateFor(mid);
           const idx = st.done.findIndex(i => i.id === id);
           if (idx !== -1) {
             const [item] = st.done.splice(idx, 1);
             delete item.completedAt;
             st.pending.push(item);
-            saveStateFor(mid, date, st);
+            saveStateFor(mid, st);
           }
           rerender();
         });
@@ -3044,14 +2993,14 @@ document.addEventListener('DOMContentLoaded', init);
         const id = itemEl.dataset.id;
         itemEl.classList.add('completing');
         setTimeout(() => {
-          const mid = currentMeetingId(), date = currentDate();
-          const s = getStateFor(mid, date);
+          const mid = currentMeetingId();
+          const s = getStateFor(mid);
           const idx = s.pending.findIndex(i => i.id === id);
           if (idx !== -1) {
             const [item] = s.pending.splice(idx, 1);
             item.completedAt = new Date().toISOString();
             s.done.unshift(item);
-            saveStateFor(mid, date, s);
+            saveStateFor(mid, s);
           }
           rerender();
           // auto-open done section
@@ -3101,10 +3050,10 @@ document.addEventListener('DOMContentLoaded', init);
         function saveEdit() {
           const newText = textEl.textContent.trim();
           if (newText) {
-            const mid = currentMeetingId(), date = currentDate();
-            const s = getStateFor(mid, date);
+            const mid = currentMeetingId();
+            const s = getStateFor(mid);
             const item = s.pending.find(i => i.id === id);
-            if (item) { item.text = newText; saveStateFor(mid, date, s); }
+            if (item) { item.text = newText; saveStateFor(mid, s); }
           }
           rerender();
         }
@@ -3132,10 +3081,10 @@ document.addEventListener('DOMContentLoaded', init);
         const id = itemEl.dataset.id;
         itemEl.classList.add('completing');
         setTimeout(() => {
-          const mid = currentMeetingId(), date = currentDate();
-          const s = getStateFor(mid, date);
+          const mid = currentMeetingId();
+          const s = getStateFor(mid);
           s.pending = s.pending.filter(i => i.id !== id);
-          saveStateFor(mid, date, s);
+          saveStateFor(mid, s);
           rerender();
         }, 180);
       });
@@ -3228,10 +3177,10 @@ document.addEventListener('DOMContentLoaded', init);
     const input = document.getElementById('reuniao-input');
     const text = input?.value.trim();
     if (!text) { input?.focus(); return; }
-    const mid = currentMeetingId(), date = currentDate();
-    const s = getStateFor(mid, date);
+    const mid = currentMeetingId();
+    const s = getStateFor(mid);
     s.pending.push({ id: Date.now().toString(), text, createdAt: new Date().toISOString() });
-    saveStateFor(mid, date, s);
+    saveStateFor(mid, s);
     input.value = '';
     rerender();
     input.focus();
@@ -3242,9 +3191,6 @@ document.addEventListener('DOMContentLoaded', init);
   window.renderReuniao = function() {
     renderSelect();
 
-    const dateInput = document.getElementById('reuniao-date-input');
-    if (dateInput && !dateInput.value) dateInput.value = todayISO();
-
     rerender();
 
     // Select change
@@ -3252,12 +3198,6 @@ document.addEventListener('DOMContentLoaded', init);
     if (sel && !sel._bound) {
       sel._bound = true;
       sel.addEventListener('change', rerender);
-    }
-
-    // Date change
-    if (dateInput && !dateInput._bound) {
-      dateInput._bound = true;
-      dateInput.addEventListener('change', rerender);
     }
 
     // Add button
