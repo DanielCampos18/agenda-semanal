@@ -954,6 +954,354 @@
     .cal-task-chip.done     { background: rgba(34,197,94,0.15); color: #86efac; }
     .cal-task-chip.cancelled { background: var(--bg-muted); color: var(--text-faint); }
     .cal-more { font-size: 10px; color: var(--text-faint); padding-left: 4px; }
+    /* ============================================================
+       REUNIÃO TAB
+    ============================================================ */
+    .reuniao-container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: var(--space-4) 0 80px;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    .reuniao-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      padding: var(--space-6);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+    }
+
+    .reuniao-header-left {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .reuniao-icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background: rgba(59,130,246,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-blue);
+      flex-shrink: 0;
+    }
+
+    .reuniao-icon-wrap i { width: 22px; height: 22px; }
+
+    .reuniao-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .reuniao-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .reuniao-badge {
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(59,130,246,0.12);
+      color: var(--accent-blue);
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .reuniao-input-row {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .reuniao-input {
+      flex: 1;
+      padding: 12px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 150ms;
+    }
+
+    .reuniao-input:focus { border-color: var(--accent-blue); }
+    .reuniao-input::placeholder { color: var(--text-faint); }
+
+    .reuniao-add-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 18px;
+      background: var(--accent-blue);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 150ms, transform 100ms;
+      white-space: nowrap;
+    }
+
+    .reuniao-add-btn:hover { opacity: 0.88; }
+    .reuniao-add-btn:active { transform: scale(0.97); }
+    .reuniao-add-btn i { width: 16px; height: 16px; }
+
+    .reuniao-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .reuniao-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: 14px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      transition: transform 180ms var(--ease-out), opacity 180ms var(--ease-out),
+                  box-shadow 150ms, border-color 150ms;
+      animation: slideInItem 200ms var(--ease-out);
+    }
+
+    @keyframes slideInItem {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reuniao-item:hover {
+      border-color: var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    .reuniao-item.completing {
+      opacity: 0;
+      transform: translateX(24px) scale(0.97);
+    }
+
+    .reuniao-checkbox {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: none;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 150ms, background 150ms;
+      padding: 0;
+    }
+
+    .reuniao-checkbox:hover {
+      border-color: var(--accent-green);
+    }
+
+    .reuniao-checkbox i { width: 11px; height: 11px; opacity: 0; transition: opacity 100ms; }
+    .reuniao-checkbox:hover i { opacity: 0.4; color: var(--accent-green); }
+
+    .reuniao-item-text {
+      flex: 1;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+
+    .reuniao-item-num {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-faint);
+      background: var(--bg-muted);
+      border-radius: 4px;
+      padding: 2px 7px;
+      flex-shrink: 0;
+    }
+
+    .reuniao-delete-btn {
+      background: none;
+      border: none;
+      color: var(--text-faint);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      transition: color 150ms, background 150ms;
+      flex-shrink: 0;
+    }
+
+    .reuniao-delete-btn:hover {
+      color: var(--accent-red);
+      background: rgba(239,68,68,0.1);
+    }
+
+    .reuniao-delete-btn i { width: 15px; height: 15px; }
+
+    .reuniao-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-8) var(--space-4);
+      color: var(--text-faint);
+      text-align: center;
+    }
+
+    .reuniao-empty i { width: 40px; height: 40px; opacity: 0.4; }
+    .reuniao-empty p { font-size: 0.875rem; }
+
+    /* Done section */
+    .reuniao-done-section {
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-card);
+    }
+
+    .reuniao-done-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 150ms, background 150ms;
+    }
+
+    .reuniao-done-toggle:hover {
+      color: var(--text-primary);
+      background: var(--bg-muted);
+    }
+
+    .reuniao-done-toggle-left {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .reuniao-done-toggle-left i { width: 16px; height: 16px; color: var(--accent-green); }
+
+    .reuniao-done-count {
+      background: rgba(34,197,94,0.12);
+      color: var(--accent-green);
+      border-radius: 999px;
+      padding: 1px 8px;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .reuniao-chevron {
+      width: 16px !important;
+      height: 16px !important;
+      transition: transform 200ms var(--ease-out);
+    }
+
+    .reuniao-done-toggle[aria-expanded="true"] .reuniao-chevron {
+      transform: rotate(180deg);
+    }
+
+    .reuniao-done-list {
+      border-top: 1px solid var(--border-subtle);
+      padding: var(--space-3);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .reuniao-done-list.hidden { display: none; }
+
+    .reuniao-done-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: 10px 12px;
+      background: var(--bg-muted);
+      border-radius: var(--radius-sm);
+      animation: slideInItem 200ms var(--ease-out);
+    }
+
+    .reuniao-done-item-check {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(34,197,94,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--accent-green);
+    }
+
+    .reuniao-done-item-check i { width: 11px; height: 11px; }
+
+    .reuniao-done-item-text {
+      flex: 1;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-decoration: line-through;
+      text-decoration-color: var(--text-faint);
+    }
+
+    .reuniao-done-item-time {
+      font-size: 0.7rem;
+      color: var(--text-faint);
+      white-space: nowrap;
+    }
+
+    .reuniao-clear-btn {
+      margin: var(--space-3) var(--space-3) var(--space-3) auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-faint);
+      font-family: inherit;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: color 150ms, border-color 150ms;
+    }
+
+    .reuniao-clear-btn:hover { color: var(--accent-red); border-color: var(--accent-red); }
+    .reuniao-clear-btn i { width: 13px; height: 13px; }
+
+    [data-theme="light"] .reuniao-header,
+    [data-theme="light"] .reuniao-item,
+    [data-theme="light"] .reuniao-done-section {
+      border-color: transparent;
+      box-shadow: 0 1px 4px rgba(15,23,42,0.08);
+    }
+
+    @media (max-width: 640px) {
+      .reuniao-add-btn span { display: none; }
+      .reuniao-add-btn { padding: 12px 14px; }
+    }
+
   </style>
 </head>
 <body>
@@ -1031,6 +1379,12 @@
         <i data-lucide="trophy" aria-hidden="true"></i>
         <span>Histórico</span>
       </button>
+      <button class="tab-btn" data-tab="reuniao"
+              id="tab-btn-reuniao"
+              role="tab" aria-selected="false" aria-controls="tab-reuniao">
+        <i data-lucide="users" aria-hidden="true"></i>
+        <span>Reunião</span>
+      </button>
     </nav>
 
     <!-- TAB PANELS -->
@@ -1079,6 +1433,61 @@
         <div class="history-summary" id="history-summary"></div>
         <div class="history-filters" id="history-filters"></div>
         <div class="history-list" id="history-list"></div>
+      </section>
+
+      <!-- REUNIÃO TAB -->
+      <section id="tab-reuniao" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-reuniao">
+        <div class="reuniao-container">
+
+          <!-- Header -->
+          <div class="reuniao-header">
+            <div class="reuniao-header-left">
+              <div class="reuniao-icon-wrap">
+                <i data-lucide="users" aria-hidden="true"></i>
+              </div>
+              <div>
+                <h2 class="reuniao-title">Pauta da Reunião</h2>
+                <p class="reuniao-subtitle" id="reuniao-subtitle">Sócios · <span id="reuniao-date"></span></p>
+              </div>
+            </div>
+            <div class="reuniao-header-right">
+              <span class="reuniao-badge" id="reuniao-badge">0 pendentes</span>
+            </div>
+          </div>
+
+          <!-- Input -->
+          <div class="reuniao-input-row">
+            <input type="text" id="reuniao-input" class="reuniao-input"
+              placeholder="Adicionar item à pauta..." maxlength="200" autocomplete="off">
+            <button class="reuniao-add-btn" id="reuniao-add-btn" aria-label="Adicionar">
+              <i data-lucide="plus" aria-hidden="true"></i>
+              <span>Adicionar</span>
+            </button>
+          </div>
+
+          <!-- Pending list -->
+          <div id="reuniao-pending-list" class="reuniao-list"></div>
+
+          <!-- Empty state -->
+          <div id="reuniao-empty" class="reuniao-empty hidden">
+            <i data-lucide="check-circle-2" aria-hidden="true"></i>
+            <p>Pauta vazia. Adicione os itens que precisa tratar.</p>
+          </div>
+
+          <!-- Completed section -->
+          <div class="reuniao-done-section" id="reuniao-done-section">
+            <button class="reuniao-done-toggle" id="reuniao-done-toggle" aria-expanded="false">
+              <div class="reuniao-done-toggle-left">
+                <i data-lucide="check-circle-2" aria-hidden="true"></i>
+                <span>Concluídos</span>
+                <span class="reuniao-done-count" id="reuniao-done-count">0</span>
+              </div>
+              <i data-lucide="chevron-down" class="reuniao-chevron" aria-hidden="true"></i>
+            </button>
+            <div id="reuniao-done-list" class="reuniao-done-list hidden"></div>
+          </div>
+
+        </div>
       </section>
 
     </main>
@@ -1462,6 +1871,7 @@ function switchTab(tabName) {
   if (tabName === 'semana')     renderSemana();
   if (tabName === 'calendario') renderCalendario();
   if (tabName === 'historico')  renderHistorico();
+  if (tabName === 'reuniao')    renderReuniao();
 }
 
 function initTabs() {
@@ -2115,6 +2525,194 @@ async function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+// ============================================================
+// REUNIÃO — Pauta dos Sócios
+// ============================================================
+
+(function() {
+  const STORAGE_KEY = 'reuniao_pauta_v1';
+
+  function getState() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { pending: [], done: [] };
+    } catch { return { pending: [], done: [] }; }
+  }
+
+  function saveState(s) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+  }
+
+  function formatTime(iso) {
+    const d = new Date(iso);
+    return d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function todayLabel() {
+    return new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+  }
+
+  function updateBadge(s) {
+    const badge = document.getElementById('reuniao-badge');
+    const doneCount = document.getElementById('reuniao-done-count');
+    if (badge) badge.textContent = s.pending.length + (s.pending.length === 1 ? ' pendente' : ' pendentes');
+    if (doneCount) doneCount.textContent = s.done.length;
+  }
+
+  function rerenderList() {
+    const s = getState();
+    const list = document.getElementById('reuniao-pending-list');
+    const emptyEl = document.getElementById('reuniao-empty');
+    const doneList = document.getElementById('reuniao-done-list');
+    if (!list) return;
+
+    // Pending
+    list.innerHTML = '';
+    if (s.pending.length === 0) {
+      emptyEl && emptyEl.classList.remove('hidden');
+    } else {
+      emptyEl && emptyEl.classList.add('hidden');
+      s.pending.forEach((item, idx) => {
+        const el = document.createElement('div');
+        el.className = 'reuniao-item';
+        el.dataset.id = item.id;
+        el.innerHTML = `
+          <button class="reuniao-checkbox" data-action="check" aria-label="Concluir">
+            <i data-lucide="check" aria-hidden="true"></i>
+          </button>
+          <span class="reuniao-item-text">${escapeHtml(item.text)}</span>
+          <span class="reuniao-item-num">#${idx + 1}</span>
+          <button class="reuniao-delete-btn" data-action="delete" aria-label="Remover">
+            <i data-lucide="x" aria-hidden="true"></i>
+          </button>
+        `;
+        list.appendChild(el);
+      });
+    }
+
+    // Done
+    if (doneList) {
+      doneList.innerHTML = '';
+      if (s.done.length > 0) {
+        // Clear button
+        const clearRow = document.createElement('div');
+        clearRow.style.display = 'flex';
+        clearRow.style.justifyContent = 'flex-end';
+        clearRow.style.padding = '4px 4px 0';
+        clearRow.innerHTML = `<button class="reuniao-clear-btn" id="reuniao-clear-btn">
+          <i data-lucide="trash-2"></i> Limpar tudo
+        </button>`;
+        doneList.appendChild(clearRow);
+
+        s.done.forEach(item => {
+          const el = document.createElement('div');
+          el.className = 'reuniao-done-item';
+          el.dataset.id = item.id;
+          el.innerHTML = `
+            <div class="reuniao-done-item-check">
+              <i data-lucide="check" aria-hidden="true"></i>
+            </div>
+            <span class="reuniao-done-item-text">${escapeHtml(item.text)}</span>
+            <span class="reuniao-done-item-time">${formatTime(item.completedAt)}</span>
+          `;
+          doneList.appendChild(el);
+        });
+
+        document.getElementById('reuniao-clear-btn')?.addEventListener('click', () => {
+          const st = getState(); st.done = []; saveState(st);
+          rerenderList(); updateBadge(getState()); lucide.createIcons();
+        });
+      }
+    }
+
+    updateBadge(s);
+    lucide.createIcons();
+    attachListEvents();
+  }
+
+  function attachListEvents() {
+    // Checkbox — complete item
+    document.querySelectorAll('#reuniao-pending-list .reuniao-checkbox').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const itemEl = btn.closest('.reuniao-item');
+        const id = itemEl.dataset.id;
+        itemEl.classList.add('completing');
+        setTimeout(() => {
+          const s = getState();
+          const idx = s.pending.findIndex(i => i.id === id);
+          if (idx !== -1) {
+            const [item] = s.pending.splice(idx, 1);
+            item.completedAt = new Date().toISOString();
+            s.done.unshift(item);
+            saveState(s);
+          }
+          rerenderList();
+        }, 180);
+      });
+    });
+
+    // Delete item
+    document.querySelectorAll('#reuniao-pending-list .reuniao-delete-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const itemEl = btn.closest('.reuniao-item');
+        const id = itemEl.dataset.id;
+        itemEl.classList.add('completing');
+        setTimeout(() => {
+          const s = getState();
+          s.pending = s.pending.filter(i => i.id !== id);
+          saveState(s);
+          rerenderList();
+        }, 180);
+      });
+    });
+
+    // Done toggle
+    const toggleBtn = document.getElementById('reuniao-done-toggle');
+    if (toggleBtn && !toggleBtn._bound) {
+      toggleBtn._bound = true;
+      toggleBtn.addEventListener('click', () => {
+        const doneList = document.getElementById('reuniao-done-list');
+        const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+        toggleBtn.setAttribute('aria-expanded', !expanded);
+        doneList.classList.toggle('hidden', expanded);
+        lucide.createIcons();
+      });
+    }
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  window.renderReuniao = function() {
+    const dateEl = document.getElementById('reuniao-date');
+    if (dateEl) dateEl.textContent = todayLabel();
+
+    rerenderList();
+
+    const input = document.getElementById('reuniao-input');
+    const addBtn = document.getElementById('reuniao-add-btn');
+
+    if (input && addBtn && !addBtn._bound) {
+      addBtn._bound = true;
+
+      function addItem() {
+        const text = input.value.trim();
+        if (!text) { input.focus(); return; }
+        const s = getState();
+        s.pending.push({ id: Date.now().toString(), text, createdAt: new Date().toISOString() });
+        saveState(s);
+        input.value = '';
+        rerenderList();
+        input.focus();
+      }
+
+      addBtn.addEventListener('click', addItem);
+      input.addEventListener('keydown', e => { if (e.key === 'Enter') addItem(); });
+    }
+  };
+})();
+
   </script>
 
 </body>
